@@ -25,11 +25,15 @@ public:
 	{
 		this->y = y;
 	}
-	double distance(void) const // “ак как не указано от какой точки мы ищем рассто€ние, то по умолчанию считаем что от начала оси координат, 
+	double distance(void) const // “ак как не указано от какой точки мы ищем рассто€ние, то по умолчанию считаем что от начала оси координат,
 	{							// а const потому что в этой функции мы не мен€ем изначальных значений точки и рассто€ние до точки будет всегда одинаковым
-		double distance;
+		double distance;        
 		distance = round(sqrt(x * x + y * y)*100)/100;
 		return distance;
+	}
+	double distance_from_point(double x2, double y2) const // Ќа вс€кий случай сделал метод, который вычисл€ет рассто€ние до указанной точки, от текущей точки
+	{
+		return round(sqrt((x2 - x) * (x2 - x) + (y2 - y) * (y2 - y)) * 100) / 100;
 	}
 };
 
@@ -55,25 +59,27 @@ void main()
 
 #endif // STRACT_POINT
 
-	Point A; //“очка ј и ¬ дл€ удобства задаем внутри программы, хот€ можно и сделать чтобы вводили
+	Point A; //“очка ј и ¬ дл€ удобства заданы внутри программы, хот€ можно и сделать чтобы их вводили
 
 	A.set_x(2);
 	A.set_y(3);
-	cout << "–ассто€ние от начала оси координат до точки A с координатами x = " << A.get_x() << " и  y = " << A.get_y() << " равно " << A.distance() << endl;
 
 	Point B;
 	B.set_x(4);
 	B.set_y(5);
 
-	cout << "–ассто€ние от точки ј с координатами (" << A.get_x() << "," << A.get_y() << ") до точки B с координатами (";
-	cout << B.get_x() << "," << B.get_y() << ") составл€ет " << distance(A.get_x(), A.get_y(), B.get_x(), B.get_y()) << endl;
+	cout << "–ассто€ние от начала оси координат до точки A с координатами x = " << A.get_x() << " и  y = " << A.get_y() << " равно " << A.distance() << endl << endl;
+	
+	cout << "(Function)–ассто€ние от точки ј с координатами (" << A.get_x() << "," << A.get_y() << ") до точки B с координатами (";
+	cout << B.get_x() << "," << B.get_y() << ") составл€ет " << distance(A.get_x(), A.get_y(), B.get_x(), B.get_y()) << endl << endl;
+
+	cout << "(Method)–ассто€ние от точки ј с координатами (" << A.get_x() << "," << A.get_y() << ") до точки B с координатами (";
+	cout << B.get_x() << "," << B.get_y() << ") составл€ет " << A.distance_from_point(B.get_x(), B.get_y()) << endl;
 
 	
 }
 
 double distance(const double x1, const double y1, const double x2, const double y2)
 {
-	double distance;
-	distance = round(sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1)) * 100)/100;
-	return distance;
+	return round(sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1)) * 100) / 100;
 }
