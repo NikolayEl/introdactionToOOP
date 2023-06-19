@@ -30,9 +30,9 @@ public:
 								// Хотя скорее всего так как метод принадлежит определенной точки, то в задании говорится про другую точку и нужно найти расстояние до неё, сделал этот метод ниже
 		return round(sqrt(x * x + y * y) * 100) / 100;
 	}
-	double distance_from_point(double x2, double y2) const // На всякий случай сделал метод, который вычисляет расстояние до указанной точки, от текущей точки
+	double distance_from_point(Point B) const // На всякий случай сделал метод, который вычисляет расстояние до указанной точки, от текущей точки
 	{
-		return round(sqrt((x2 - x) * (x2 - x) + (y2 - y) * (y2 - y)) * 100) / 100;
+		return round(sqrt((B.x - x) * (B.x - x) + (B.y - y) * (B.y - y)) * 100) / 100;
 	}
 };
 
@@ -73,7 +73,7 @@ void main()
 	cout << B.get_x() << "," << B.get_y() << ") составляет " << distance(A.get_x(), A.get_y(), B.get_x(), B.get_y()) << endl << endl;
 
 	cout << "(Method)Расстояние от точки А с координатами (" << A.get_x() << "," << A.get_y() << ") до точки B с координатами (";
-	cout << B.get_x() << "," << B.get_y() << ") составляет " << A.distance_from_point(B.get_x(), B.get_y()) << endl;
+	cout << B.get_x() << "," << B.get_y() << ") составляет " << A.distance_from_point(B) << endl;
 
 	
 }
