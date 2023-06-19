@@ -2,7 +2,8 @@
 
 using namespace std;
 
-double distance(const double x1, const double y1, const double x2, const double y2); 
+class Point;
+double distance(Point A, Point B);
 
 class Point
 {
@@ -25,14 +26,12 @@ public:
 	{
 		this->y = y;
 	}
-	double distance(void) const // Так как не указано от какой точки мы ищем расстояние, то по умолчанию считаем что от начала оси координат,
-	{							// а const потому что это по сути GET метод
-								// Хотя скорее всего так как метод принадлежит определенной точки, то в задании говорится про другую точку и нужно найти расстояние до неё, сделал этот метод ниже
-		return round(sqrt(x * x + y * y) * 100) / 100;
-	}
-	double distance_from_point(Point B) const // На всякий случай сделал метод, который вычисляет расстояние до указанной точки, от текущей точки
+	double distance(Point other) const // На всякий случай сделал метод, который вычисляет расстояние до указанной точки, от текущей точки
 	{
-		return round(sqrt((B.x - x) * (B.x - x) + (B.y - y) * (B.y - y)) * 100) / 100;
+		//double x_distance = this->x - other.x;
+		//double y_distance = this->y - other.y;
+		//return round(sqrt(x_distance * x_distance + y_distance * y_distance) * 100) / 100;
+		return round(sqrt(pow(this->x - other.x, 2) + pow(this->y - other.y, 2)) * 100) / 100;
 	}
 };
 
@@ -64,21 +63,23 @@ void main()
 	A.set_y(3);
 
 	Point B;
-	B.set_x(4);
-	B.set_y(5);
+	B.set_x(7);
+	B.set_y(8);
 
-	cout << "Расстояние от начала оси координат до точки A с координатами x = " << A.get_x() << " и  y = " << A.get_y() << " равно " << A.distance() << endl << endl;
 	
 	cout << "(Function)Расстояние от точки А с координатами (" << A.get_x() << "," << A.get_y() << ") до точки B с координатами (";
-	cout << B.get_x() << "," << B.get_y() << ") составляет " << distance(A.get_x(), A.get_y(), B.get_x(), B.get_y()) << endl << endl;
+	cout << B.get_x() << "," << B.get_y() << ") составляет " << distance(A, B) << endl << endl;
 
 	cout << "(Method)Расстояние от точки А с координатами (" << A.get_x() << "," << A.get_y() << ") до точки B с координатами (";
-	cout << B.get_x() << "," << B.get_y() << ") составляет " << A.distance_from_point(B) << endl;
+	cout << B.get_x() << "," << B.get_y() << ") составляет " << A.distance(B) << endl;
 
 	
 }
 
-double distance(const double x1, const double y1, const double x2, const double y2)
+double distance(Point A, Point B)
 {
-	return round(sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1)) * 100) / 100;
+	//double x_distance = A.get_x() - B.get_x();
+	//double y_distance = A.get_y() - B.get_y();
+	//return round(sqrt(x_distance * x_distance + y_distance * y_distance) * 100) / 100;
+	return round(sqrt(pow(A.get_x() - B.get_x(), 2) + pow(A.get_y() - B.get_y(), 2)) * 100) / 100;
 }
