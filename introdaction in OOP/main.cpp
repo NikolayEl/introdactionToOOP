@@ -33,9 +33,14 @@ public:
 		//return round(sqrt(x_distance * x_distance + y_distance * y_distance) * 100) / 100;
 		return round(sqrt(pow(this->x - other.x, 2) + pow(this->y - other.y, 2)) * 100) / 100;
 	}
+	void print()
+	{
+		cout << "X - " << x << "\tY = " << y << endl;
+	}
 };
 
 //#define STRACT_POINT
+//#define DISTANCE_CHECK
 
 void main()
 {
@@ -56,7 +61,7 @@ void main()
 	cout << pA->x << "\t" << pA->y << endl;
 
 #endif // STRACT_POINT
-
+#ifdef DISTANCE_CHECK
 	Point A; //Точка А и В для удобства заданы внутри программы, хотя можно и сделать чтобы их вводили
 
 	A.set_x(2);
@@ -72,8 +77,10 @@ void main()
 
 	cout << "(Method)Расстояние от точки А с координатами (" << A.get_x() << "," << A.get_y() << ") до точки B с координатами (";
 	cout << B.get_x() << "," << B.get_y() << ") составляет " << A.distance(B) << endl;
-
+#endif //DISTANCE_CHEK
 	
+	Point A;
+	A.print();
 }
 
 double distance(Point A, Point B)
