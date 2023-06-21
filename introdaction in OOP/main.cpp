@@ -1,6 +1,10 @@
 ﻿#include <iostream>
 
 using namespace std;
+//using std::;
+//using std::
+//using std::
+
 
 class Point;
 double distance(Point A, Point B);
@@ -26,6 +30,30 @@ public:
 	{
 		this->y = y;
 	}
+	//                     Constructors:
+	//Point()
+	//{
+	//	x = y = double(); //type() - это значение по умолчанию для заданного типа
+	//					  // таким образом мы якобы вызываем конструктор по умолчанию для заданного типа
+	//	cout << "Constructor:\t\t" << this << endl;
+	//}
+	//Point(double x)
+	//{
+	//	this->x = x;
+	//	this->y = 0;
+	//	cout << "Single-argument constructor\t" << this << endl;
+	//}
+	Point(double x = 0, double y = 0)
+	{
+		this->x = x;
+		this->y = y;
+		cout << "DefaultConstructor:\t" << this << endl;
+	}
+	~Point()
+	{
+		cout << "Distructor:\t\t" << this << endl;
+	}
+	//                     Methods:
 	double distance(Point other) const // На всякий случай сделал метод, который вычисляет расстояние до указанной точки, от текущей точки
 	{
 		//double x_distance = this->x - other.x;
@@ -35,7 +63,7 @@ public:
 	}
 	void print()
 	{
-		cout << "X - " << x << "\tY = " << y << endl;
+		cout << "X = " << x << "\tY = " << y << endl;
 	}
 };
 
@@ -61,6 +89,7 @@ void main()
 	cout << pA->x << "\t" << pA->y << endl;
 
 #endif // STRACT_POINT
+
 #ifdef DISTANCE_CHECK
 	Point A; //Точка А и В для удобства заданы внутри программы, хотя можно и сделать чтобы их вводили
 
@@ -81,6 +110,12 @@ void main()
 	
 	Point A;
 	A.print();
+
+	Point B = 5; // Single-argument constructor
+	B.print();
+
+	Point C(2, 3);
+	C.print();
 }
 
 double distance(Point A, Point B)
