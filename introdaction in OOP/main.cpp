@@ -1,13 +1,15 @@
 ﻿#include <iostream>
 
 using namespace std;
+using std::cin;
+using std::cout;
 //using std::;
-//using std::
-//using std::
+
+#define delimetr "\n--------------------------------------------------------------------------------------------------------------------\n"
 
 
 class Point;
-double distance(Point A, Point B);
+double distance(const Point& A, const Point& B);
 
 class Point
 {
@@ -49,12 +51,26 @@ public:
 		this->y = y;
 		cout << "DefaultConstructor:\t" << this << endl;
 	}
+	Point(const Point& other)
+	{
+		this->x = other.x;
+		this->y = other.y;
+		cout << "CopyConstructor:\t" << this << endl;
+	}
 	~Point()
 	{
 		cout << "Distructor:\t\t" << this << endl;
 	}
+	//                     Operators:
+	Point& operator =(const Point& other)
+	{
+		this->x = other.x;
+		this->y = other.y;
+		cout << "CopyAssigment:\t\t" << this << endl;
+		return *this;
+	}
 	//                     Methods:
-	double distance(Point other) const // На всякий случай сделал метод, который вычисляет расстояние до указанной точки, от текущей точки
+	double distance(const Point& other) const // На всякий случай сделал метод, который вычисляет расстояние до указанной точки, от текущей точки
 	{
 		//double x_distance = this->x - other.x;
 		//double y_distance = this->y - other.y;
@@ -69,6 +85,7 @@ public:
 
 //#define STRACT_POINT
 //#define DISTANCE_CHECK
+//#define CONSTRUCTOR_CHEK
 
 void main()
 {
@@ -100,14 +117,33 @@ void main()
 	B.set_x(7);
 	B.set_y(8);
 
+	cout << delimetr << endl;
 	
 	cout << "(Function)Расстояние от точки А с координатами (" << A.get_x() << "," << A.get_y() << ") до точки B с координатами (";
 	cout << B.get_x() << "," << B.get_y() << ") составляет " << distance(A, B) << endl << endl;
 
+	cout << delimetr << endl;
+
+	cout << "(Function)Расстояние от точки А с координатами (" << B.get_x() << "," << B.get_y() << ") до точки B с координатами (";
+	cout << A.get_x() << "," << A.get_y() << ") составляет " << distance(B, A) << endl << endl;
+
+	cout << delimetr << endl;
+
 	cout << "(Method)Расстояние от точки А с координатами (" << A.get_x() << "," << A.get_y() << ") до точки B с координатами (";
 	cout << B.get_x() << "," << B.get_y() << ") составляет " << A.distance(B) << endl;
+
+	cout << delimetr << endl;
+
+	cout << "(Method)Расстояние от точки А с координатами (" << B.get_x() << "," << B.get_y() << ") до точки B с координатами (";
+	cout << A.get_x() << "," << A.get_y() << ") составляет " << B.distance(A) << endl;
+
+	cout << delimetr << endl;
+
 #endif //DISTANCE_CHEK
 	
+#ifdef CONSTRUCTOR_CHEK
+
+
 	Point A;
 	A.print();
 
@@ -116,9 +152,31 @@ void main()
 
 	Point C(2, 3);
 	C.print();
+	int a = 2, b = 3;
+
+	Point D = C; //CopyConstructor
+	D.print();
+
+	Point E;
+	E = D; //Copy Assigment
+	E.print();
+#endif // CONSTRUCTOR_CHEK
+
+	int a, b, c;
+	a = b = c = 0;
+	cout << a << "\t" << b << "\t" << c << endl;
+
+	Point A, B, C;
+
+	A = B = C = Point(2, 3);
+
+	A.print();
+	B.print();
+	C.print();
+
 }
 
-double distance(Point A, Point B)
+double distance(const Point& A, const Point& B)
 {
 	//double x_distance = A.get_x() - B.get_x();
 	//double y_distance = A.get_y() - B.get_y();
