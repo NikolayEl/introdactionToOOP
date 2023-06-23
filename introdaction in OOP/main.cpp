@@ -11,6 +11,7 @@ using std::cout;
 class Point;
 double distance(const Point& A, const Point& B);
 Point operator+(const Point& left, const Point& right);
+ostream& operator<<(ostream& os, const Point& obj);
 
 class Point
 {
@@ -62,6 +63,7 @@ public:
 	{
 		cout << "Distructor:\t\t" << this << endl;
 	}
+
 	//                     Operators:
 	Point& operator =(const Point& other)
 	{
@@ -70,6 +72,26 @@ public:
 		cout << "CopyAssigment:\t\t" << this << endl;
 		return *this;
 	}
+	Point& operator++()
+	{
+		x++;
+		y++;
+		return *this;
+	}
+	Point operator++(int)
+	{
+		Point old = *this; // сохраняем исходное значение объекта
+		x++;
+		y++;
+		return old;
+	}
+	Point& operator+=(const Point& other)
+	{
+		this->x += other.x;
+		this->y += other.y;
+		return *this;
+	}
+
 	//                     Methods:
 	double distance(const Point& other) const // На всякий случай сделал метод, который вычисляет расстояние до указанной точки, от текущей точки
 	{
@@ -88,6 +110,7 @@ public:
 //#define DISTANCE_CHECK
 //#define CONSTRUCTOR_CHEK
 //#define ASSIGNMENT_CHEK
+//#define INCREMENT_CHEK
 
 void main()
 {
@@ -180,6 +203,8 @@ void main()
 	C.print();
 #endif // ASSIGNMENT_CHEK
 
+#ifdef INCREMENT_CHEK
+
 	int a = 2;
 	int b = 3;
 	int c = a + b;
@@ -189,9 +214,29 @@ void main()
 	Point B(7, 8);
 	Point C = A + B;
 	C.print();
+
+	A++;
+	A.print();
+
+#endif // INCREMENT_CHEK
+
+	Point A(2, 3);
+	A.print();
+
+	Point B(7, 8);
+	B.print();
+
+	A += B;
+	//A.print();
+
+	cout << A << endl;
 }
 
+ostream& operator<<(ostream& os, const Point& obj)
+{
+	return os << "X = " << obj.get_x() << "\tY = " << obj.get_y();
 
+}
 double distance(const Point& A, const Point& B)
 {
 	//double x_distance = A.get_x() - B.get_x();
@@ -202,8 +247,17 @@ double distance(const Point& A, const Point& B)
 
 Point operator+(const Point& left, const Point& right)
 {
-	Point result;
-	result.set_x(left.get_x() + right.get_x());
-	result.set_y(left.get_y() + right.get_y());
-	return result;
+	//Point result;
+	//result.set_x(left.get_x() + right.get_x());
+	//result.set_y(left.get_y() + right.get_y());
+	//Point result
+	//(
+	//	left.get_x() + right.get_x(), 
+	//	left.get_y() + right.get_y()
+	//);
+	return Point
+		(
+			left.get_x() + right.get_x(),
+			left.get_y() + right.get_y()
+		);
 }
