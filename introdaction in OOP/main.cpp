@@ -10,6 +10,7 @@ using std::cout;
 
 class Point;
 double distance(const Point& A, const Point& B);
+Point operator+(const Point& left, const Point& right);
 
 class Point
 {
@@ -49,7 +50,7 @@ public:
 	{
 		this->x = x;
 		this->y = y;
-		cout << "DefaultConstructor:\t" << this << endl;
+		cout << "Constructor:\t\t" << this << endl;
 	}
 	Point(const Point& other)
 	{
@@ -86,6 +87,7 @@ public:
 //#define STRACT_POINT
 //#define DISTANCE_CHECK
 //#define CONSTRUCTOR_CHEK
+//#define ASSIGNMENT_CHEK
 
 void main()
 {
@@ -162,6 +164,9 @@ void main()
 	E.print();
 #endif // CONSTRUCTOR_CHEK
 
+#ifdef ASSIGNMENT_CHEK
+
+
 	int a, b, c;
 	a = b = c = 0;
 	cout << a << "\t" << b << "\t" << c << endl;
@@ -173,8 +178,19 @@ void main()
 	A.print();
 	B.print();
 	C.print();
+#endif // ASSIGNMENT_CHEK
 
+	int a = 2;
+	int b = 3;
+	int c = a + b;
+	cout << c << endl;
+
+	Point A(2, 3);
+	Point B(7, 8);
+	Point C = A + B;
+	C.print();
 }
+
 
 double distance(const Point& A, const Point& B)
 {
@@ -182,4 +198,12 @@ double distance(const Point& A, const Point& B)
 	//double y_distance = A.get_y() - B.get_y();
 	//return round(sqrt(x_distance * x_distance + y_distance * y_distance) * 100) / 100;
 	return round(sqrt(pow(A.get_x() - B.get_x(), 2) + pow(A.get_y() - B.get_y(), 2)) * 100) / 100;
+}
+
+Point operator+(const Point& left, const Point& right)
+{
+	Point result;
+	result.set_x(left.get_x() + right.get_x());
+	result.set_y(left.get_y() + right.get_y());
+	return result;
 }
