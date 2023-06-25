@@ -108,6 +108,39 @@ public:
 		return old;
 	}
 
+	Fraction operator+=(const Fraction& other)
+	{
+		this->numenator *= other.denominator;
+		this->denominator *= other.denominator;
+		this->numenator = (this->integer * this->denominator + this->numenator) + (this->denominator * other.integer + other.numenator * (this->denominator / other.denominator));
+		this->integer = 0;
+		return *this;
+	}
+	Fraction operator-=(const Fraction& other)
+	{
+		this->numenator *= other.denominator;
+		this->denominator *= other.denominator;
+		this->numenator = (this->integer * this->denominator + this->numenator) - (this->denominator * other.integer + other.numenator * (this->denominator / other.denominator));
+		this->integer = 0;
+		return *this;
+	}
+	Fraction operator*=(const Fraction& other)
+	{
+		this->numenator += this->integer * this->denominator;
+		this->integer = 0;
+		this->numenator *= other.integer * other.denominator + other.numenator;
+		this->denominator *= other.denominator;
+		return *this;
+	}
+	Fraction operator/=(const Fraction& other)
+	{
+		this->numenator += this->integer * this->denominator;
+		this->integer = 0;
+		this->numenator *= other.denominator;
+		this->denominator *= other.integer * other.denominator + other.numenator;
+		return *this;
+	}
+
 
 	// 
 	//------------------------ Methods
@@ -173,6 +206,34 @@ void main()
 	C = (A - B);
 	C.reduction();
 	cout << "Вычтем дроби A: " << A << " и B: " << B << " = " << A - B << ", Сокращенно: " << C << endl;
+	C = (A * B);
+	C.reduction();
+	cout << "Умножем дроби A: " << A << " и B: " << B << " = " << A * B << ", Сокращенно: " << C << endl;
+	C = (A / B);
+	C.reduction();
+	cout << "Разделим дроби A: " << A << " и B: " << B << " = " << A / B << ", Сокращенно: " << C << endl;
+
+	cout << "С дробью А = " << A << " и дробью В = " << B << endl;
+	A += B;
+	A.reduction();
+	cout << "совершим действие А += B, итого: " << A << endl;
+
+	cout << "С дробью А = " << A << " и дробью В = " << B << endl;
+	A -= B;
+	A.reduction();
+	cout << "совершим действие А -= B, итого: " << A << endl;
+
+	cout << "С дробью А = " << A << " и дробью В = " << B << endl;
+	A *= B;
+	A.reduction();
+	cout << "совершим действие А *= B, итого: " << A << endl;
+	
+	cout << "С дробью А = " << A << " и дробью В = " << B << endl;
+	A /= B;
+	cout << A << endl;
+	A.reduction();
+	cout << "совершим действие А /= B, итого: " << A << endl;
+
 }
 
 ostream& operator<<(ostream& out, const Fraction& obj)
@@ -212,4 +273,19 @@ Fraction operator-(const Fraction& left, const Fraction& right) // Операт�
 	double left_nominator = left.get_integer() * common_denominator + (left.get_numenator() * right.get_denominator());
 	double right_nominator = right.get_integer() * common_denominator + (right.get_numenator() * left.get_denominator());
 	return Fraction(0, left_nominator - right_nominator, common_denominator);
+}
+Fraction operator*(const Fraction& left, const Fraction& right) // Оператор вычитания
+{
+	double common_denominator = left.get_denominator() * right.get_denominator();
+	double left_nominator = left.get_integer() * left.get_denominator() + left.get_numenator();
+	double right_nominator = right.get_integer() * right.get_denominator() + right.get_numenator();
+
+	return Fraction(0, left_nominator * right_nominator, common_denominator);
+}
+Fraction operator/(const Fraction& left, const Fraction& right) // Оператор вычитания
+{
+	double left_nominator = left.get_integer() * left.get_denominator() + left.get_numenator();
+	double right_nominator = right.get_integer() * right.get_denominator() + right.get_numenator();
+
+	return Fraction(0, left_nominator * right.get_denominator(), left.get_denominator() * right_nominator);
 }
