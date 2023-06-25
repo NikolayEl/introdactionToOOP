@@ -146,7 +146,7 @@ public:
 		return *this;
 	}
 
-	friend bool operator==(const Point& left, const Point& right); //операторы сравнения
+	friend bool operator==(const Point& left, const Point& right); //операторы сравнения подглядел только в этом месте в интренете
 	friend bool operator!=(const Point& left, const Point& right);
 	friend bool operator>(const Point& left, const Point& right);
 	friend bool operator<(const Point& left, const Point& right);
