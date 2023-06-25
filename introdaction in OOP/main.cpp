@@ -14,8 +14,11 @@ Point operator+(const Point& left, const Point& right); // Арифметиче�
 Point operator-(const Point& left, const Point& right); // Арифметический оператор "вычитание"
 Point operator*(const Point& left, const Point& right); // Арифметический оператор "умножение"
 Point operator/(const Point& left, const Point& right); // Арифметический оператор "деление"
-Point operator-(const Point& other);					// Унарный минус
-Point operator+(const Point& other);					// Унарный плюс
+//Point operator-(const Point& other);					// Унарный минус
+//Point operator+(const Point& other);					// Унарный плюс
+
+bool operator==(const Point& left, const Point& right);
+
 
 double distance(const Point& A, const Point& B);
 
@@ -78,17 +81,42 @@ public:
 		cout << "CopyAssigment:\t\t" << this << endl;
 		return *this;
 	}
-	Point& operator++()
+	Point& operator-() // Унарный минус
 	{
-		x++;
-		y++;
+		x = -x;
+		y = -y;
 		return *this;
 	}
-	Point operator++(int)
+	Point& operator+() // УНарный плюс
+	{
+		x = +x;
+		y = +y;
+		return *this;
+	}
+	Point& operator++()  // Префиксный инкремент
+	{
+		++x;
+		++y;
+		return *this;
+	}
+	Point& operator--() // Префиксный декремент
+	{
+		--x;
+		--y;
+		return *this;
+	}
+	Point operator++(int) // Постфиксный инкремент
 	{
 		Point old = *this; // сохраняем исходное значение объекта
 		x++;
 		y++;
+		return old;
+	}
+	Point operator--(int) // Постфиксный декремент
+	{
+		Point old = *this;
+		x--;
+		y--;
 		return old;
 	}
 	Point& operator+=(const Point& other)
@@ -97,6 +125,33 @@ public:
 		this->y += other.y;
 		return *this;
 	}
+	Point& operator-=(const Point& other) //составное присваивание с вычитанием 
+	{
+		this->x -= other.x;
+		this->y -= other.y;
+		return *this;
+	}
+	Point& operator*=(const Point& other) //составное присваивание с умножением
+	{
+		this->x *= other.x;
+		this->y *= other.y;
+		return *this;
+	}
+	Point& operator/=(const Point& other) //составное присваивание с делением
+	{
+		this->x /= other.x;
+		this->y /= other.y;
+		this->x = round((this->x * 1) / 1);
+		this->y = round((this->y * 1) / 1);
+		return *this;
+	}
+
+	friend bool operator==(const Point& left, const Point& right); //операторы сравнения
+	friend bool operator!=(const Point& left, const Point& right);
+	friend bool operator>(const Point& left, const Point& right);
+	friend bool operator<(const Point& left, const Point& right);
+	friend bool operator>=(const Point& left, const Point& right);
+	friend bool operator<=(const Point& left, const Point& right);
 
 	//                     Methods:
 	double distance(const Point& other) const // На всякий случай сделал метод, который вычисляет расстояние до указанной точки, от текущей точки
@@ -240,6 +295,37 @@ void main()
 	cout << "-(B - A): " << -(B - A) << endl;
 	cout << "+(B - A): " << +(B - A) << endl;
 	cout << "A * B: " << A * B << endl;
+	cout << "A / B: " << A / B << endl << endl;
+	cout << "  A: " << A << endl;
+	cout << "--A: " << --A << endl;
+	cout << "++A: " << ++A << endl;
+	A--;
+	cout << "A--: " << A << endl;
+	A++;
+	cout << "A++: " << A << endl;
+	cout << "A: " << A << ",     B: " << B << endl;
+	A -= B;
+	cout << "A -= B: " << A << endl << endl;
+	cout << "A: " << A << ",     B: " << B << endl;
+	A *= B;
+	cout << "A *= B: " << A << endl << endl;
+	A++;												//Сделал для проверки дробей
+	cout << "A: " << A << ",     B: " << B << endl;
+	A /= B;
+	cout << "A /= B: " << A << endl << endl;
+	//A = B; // Делаем для понимания сработки условия сравнения
+	cout << "A: " << A << ",     B: " << B << endl;
+	cout << "Проверяем сравненение А == В:   " << (A == B ? "true" : "false") << endl << endl;	
+	cout << "A: " << A << ",     B: " << B << endl;
+	cout << "Проверяем сравненение А != В:   " << (A != B ? "true" : "false") << endl << endl;
+	cout << "A: " << A << ",     B: " << B << endl;
+	cout << "Проверяем сравненение А > В:   " << (A > B ? "true" : "false") << endl << endl;
+	cout << "A: " << A << ",     B: " << B << endl;
+	cout << "Проверяем сравненение А < В:   " << (A < B ? "true" : "false") << endl << endl;
+	cout << "A: " << A << ",     B: " << B << endl;
+	cout << "Проверяем сравненение А >= В:   " << (A >= B ? "true" : "false") << endl << endl;
+	cout << "A: " << A << ",     B: " << B << endl;
+	cout << "Проверяем сравненение А <= В:   " << (A <= B ? "true" : "false") << endl << endl;
 
 }
 
@@ -248,6 +334,7 @@ ostream& operator<<(ostream& os, const Point& obj)           // Оператор
 	return os << "X = " << obj.get_x() << "\tY = " << obj.get_y();
 
 }
+// Арифметические операторы
 Point operator+(const Point& left, const Point& right)       // Арифметический оператор "сложение"
 {
 	//Point result;
@@ -272,13 +359,43 @@ Point operator*(const Point& left, const Point& right)      // Арифмети�
 {
 	return Point(left.get_x() * right.get_x(), left.get_y() * right.get_y());
 }
-Point operator-(const Point& other)                          // Унарный минус
+Point operator/(const Point& left, const Point& right)     // Арифметический оператор "деление"
 {
-	return Point(-other.get_x(), -other.get_y());
+	return Point(round((left.get_x() / right.get_x())*1)/1, round((left.get_y() / right.get_y())*1)/1); // Округлил до целового с помощью round ибо если перевести в int, то он просто отбрасывает остаток
 }
-Point operator+(const Point& other)					     // Унарный плюс
+//Унарные операторы перенес в класс, потому что так мы избегаем создание многих конструкторов, сделал по аналогии с оператором "="
+//Point operator-(const Point& other)                          // Унарный минус
+//{
+//	return Point(-other.get_x(), -other.get_y());
+//}
+//Point operator+(const Point& other)					     // Унарный плюс
+//{
+//	return Point(+other.get_x(), +other.get_y());
+//}
+
+bool operator==(const Point& left, const Point& right)
 {
-	return Point(+other.get_x(), +other.get_y());
+	return (left.get_x() == right.get_x() && left.get_y() == right.get_y());
+}
+bool operator!=(const Point& left, const Point& right)
+{
+	return !(left == right);
+}
+bool operator>(const Point& left, const Point& right)
+{
+	return ((left.get_x() + left.get_y()) > (right.get_x() + right.get_y()));
+}
+bool operator<(const Point& left, const Point& right)
+{
+	return ((left.get_x() + left.get_y()) < (right.get_x() + right.get_y()));
+}
+bool operator<=(const Point& left, const Point& right)
+{
+	return ((left.get_x() + left.get_y()) <= (right.get_x() + right.get_y()));
+}
+bool operator>=(const Point& left, const Point& right)
+{
+	return ((left.get_x() + left.get_y()) >= (right.get_x() + right.get_y()));
 }
 
 double distance(const Point& A, const Point& B)
