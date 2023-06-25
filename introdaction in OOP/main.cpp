@@ -5,7 +5,7 @@ using std::cin;
 using std::cout;
 
 class Fraction;
-ostream& operator<<(ostream& out, Fraction& obj);
+ostream& operator<<(ostream& out, const Fraction& obj);
 istream& operator>>(istream& in, Fraction& obj);
 
 Fraction operator+(const Fraction& left, const Fraction& right);
@@ -113,10 +113,11 @@ public:
 	//------------------------ Methods
 	void reduction() //Перед любыми вычислениями и сравнениями хочу применять этот метод для соркащения дроби
 	{
-		if (numenator >= denominator)
+		if (numenator >= denominator || -numenator >= denominator)
 		{
 			integer += (numenator / denominator);
 			numenator -= (int(numenator / denominator)) * denominator;
+			if (numenator < 0) numenator = -numenator; //чтобы знаменатель был не отрицательным
 		}
 		for (int i = 2; i < 98; i++)  // Сделал сокращения до 97, больше нет смысла, не работаем обычно с большими числами
 		{
@@ -163,16 +164,19 @@ void main()
 	cout << "Давайте зададим с клавиатуры дробь С" << endl;
 	cin >> C;
 	cout << "Дробь С: " << C << endl;
-	B = { 0, 12, 3 };
-	B.print();
-	Fraction D = A + B;
-	cout << "Сложим дроби A: " << A << " и B: " << B << " = " << A + B << endl;
-	
+	B = { 0, 11, 3 };
+	A.reduction();
+	B.reduction();
+	C = (A + B);
+	C.reduction();
+	cout << "Сложим дроби A: " << A << " и B: " << B << " = " <<  A + B << ", Сокращенно: " << C << endl;
+	C = (A - B);
+	C.reduction();
+	cout << "Вычтем дроби A: " << A << " и B: " << B << " = " << A - B << ", Сокращенно: " << C << endl;
 }
 
-ostream& operator<<(ostream& out, Fraction& obj)
+ostream& operator<<(ostream& out, const Fraction& obj)
 {
-	obj.reduction();
 	if (obj.get_denominator() == 1 || obj.get_numenator() == 0)
 	{
 		return out << obj.get_integer();
@@ -201,4 +205,11 @@ Fraction operator+(const Fraction& left, const Fraction& right) // Операт�
 	double left_nominator = left.get_integer() * common_denominator + (left.get_numenator() * right.get_denominator());
 	double right_nominator = right.get_integer() * common_denominator + (right.get_numenator() * left.get_denominator());
 	return Fraction(0, left_nominator + right_nominator, common_denominator);
+}
+Fraction operator-(const Fraction& left, const Fraction& right) // Оператор вычитания
+{
+	double common_denominator = left.get_denominator() * right.get_denominator();
+	double left_nominator = left.get_integer() * common_denominator + (left.get_numenator() * right.get_denominator());
+	double right_nominator = right.get_integer() * common_denominator + (right.get_numenator() * left.get_denominator());
+	return Fraction(0, left_nominator - right_nominator, common_denominator);
 }
