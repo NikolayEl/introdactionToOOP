@@ -8,6 +8,11 @@ class Fraction;
 ostream& operator<<(ostream& out, Fraction& obj);
 istream& operator>>(istream& in, Fraction& obj);
 
+Fraction operator+(const Fraction& left, const Fraction& right);
+Fraction operator-(const Fraction& left, const Fraction& right);
+Fraction operator*(const Fraction& left, const Fraction& right);
+Fraction operator/(const Fraction& left, const Fraction& right);
+
 class Fraction
 {
 	int integer;
@@ -61,12 +66,14 @@ public:
 	}
 	// ----------------------- Operators
 	friend istream& operator>>(istream& in, Fraction& obj);
+	friend ostream& operator<<(ostream& out, const Fraction& obj);
 	Fraction& operator=(const Fraction& other)
 	{
 		this->integer = other.integer;
 		this->numenator = other.numenator;
 		this->denominator = other.denominator;
 		cout << "CopyAssigment:\t" << this << endl;
+		return *this;
 	}
 	Fraction& operator-() // Унарный минус
 	{
@@ -113,7 +120,7 @@ public:
 		}
 		for (int i = 2; i < 98; i++)  // Сделал сокращения до 97, больше нет смысла, не работаем обычно с большими числами
 		{
-			if (int(numenator) % i == 0 && int(denominator) % i == 0)
+			while (int(numenator) % i == 0 && int(denominator) % i == 0)
 			{
 				numenator /= i;
 				denominator /= i;
@@ -152,6 +159,14 @@ void main()
 	cout << "Постфиксный инкремент A++: " << A << endl;
 	A--;
 	cout << "Постфиксный декремент A--: " << A << endl;
+	Fraction C;
+	cout << "Давайте зададим с клавиатуры дробь С" << endl;
+	cin >> C;
+	cout << "Дробь С: " << C << endl;
+	B = { 0, 12, 3 };
+	B.print();
+	Fraction D = A + B;
+	cout << "Сложим дроби A: " << A << " и B: " << B << " = " << A + B << endl;
 	
 }
 
@@ -164,7 +179,7 @@ ostream& operator<<(ostream& out, Fraction& obj)
 	}
 	else
 	{
-		return out << obj.get_integer() << "(" << obj.get_numenator() << "/" << obj.get_denominator() << ")" << endl;
+		return out << obj.get_integer() << "(" << obj.get_numenator() << "/" << obj.get_denominator() << ")";
 	}
 }
 
@@ -177,4 +192,13 @@ istream& operator>>(istream& in, Fraction& obj)
 	cout << "Введите знаменатель: ";
 	in >> obj.denominator;
 	return in;
+}
+
+// ----------------- Арифметические операторы вынесем за класс
+Fraction operator+(const Fraction& left, const Fraction& right) // Оператор сложение
+{
+	double common_denominator = left.get_denominator() * right.get_denominator();
+	double left_nominator = left.get_integer() * common_denominator + (left.get_numenator() * right.get_denominator());
+	double right_nominator = right.get_integer() * common_denominator + (right.get_numenator() * left.get_denominator());
+	return Fraction(0, left_nominator + right_nominator, common_denominator);
 }
