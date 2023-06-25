@@ -9,9 +9,10 @@ using std::cout;
 
 
 class Point;
-double distance(const Point& A, const Point& B);
-Point operator+(const Point& left, const Point& right);
 ostream& operator<<(ostream& os, const Point& obj);
+Point operator+(const Point& left, const Point& right);
+Point operator-(const Point& left, const Point& right);
+double distance(const Point& A, const Point& B);
 
 class Point
 {
@@ -65,7 +66,7 @@ public:
 	}
 
 	//                     Operators:
-	Point& operator =(const Point& other)
+	Point& operator=(const Point& other)
 	{
 		this->x = other.x;
 		this->y = other.y;
@@ -221,15 +222,17 @@ void main()
 #endif // INCREMENT_CHEK
 
 	Point A(2, 3);
-	A.print();
+	cout << "A: " << A << endl;
 
 	Point B(7, 8);
-	B.print();
+	cout << "B: " << B << endl << endl;
 
+	cout << "Dot operation: " << endl;
 	A += B;
-	//A.print();
+	cout << "A += B: " << A << endl;
 
-	cout << A << endl;
+	cout << "B - A: " << B - A << endl;
+
 }
 
 ostream& operator<<(ostream& os, const Point& obj)
@@ -237,14 +240,6 @@ ostream& operator<<(ostream& os, const Point& obj)
 	return os << "X = " << obj.get_x() << "\tY = " << obj.get_y();
 
 }
-double distance(const Point& A, const Point& B)
-{
-	//double x_distance = A.get_x() - B.get_x();
-	//double y_distance = A.get_y() - B.get_y();
-	//return round(sqrt(x_distance * x_distance + y_distance * y_distance) * 100) / 100;
-	return round(sqrt(pow(A.get_x() - B.get_x(), 2) + pow(A.get_y() - B.get_y(), 2)) * 100) / 100;
-}
-
 Point operator+(const Point& left, const Point& right)
 {
 	//Point result;
@@ -260,4 +255,16 @@ Point operator+(const Point& left, const Point& right)
 			left.get_x() + right.get_x(),
 			left.get_y() + right.get_y()
 		);
+}
+Point operator-(const Point& left, const Point& right)
+{
+	return Point(left.get_x() - right.get_x(), left.get_y() - right.get_y());
+}
+
+double distance(const Point& A, const Point& B)
+{
+	//double x_distance = A.get_x() - B.get_x();
+	//double y_distance = A.get_y() - B.get_y();
+	//return round(sqrt(x_distance * x_distance + y_distance * y_distance) * 100) / 100;
+	return round(sqrt(pow(A.get_x() - B.get_x(), 2) + pow(A.get_y() - B.get_y(), 2)) * 100) / 100;
 }
