@@ -9,7 +9,7 @@ using std::cout;
 
 
 class Point;
-ostream& operator<<(ostream& os, const Point& obj);     // Оператор потокового вывода
+ostream& operator<<(ostream& out, const Point& obj);     // Оператор потокового вывода
 Point operator+(const Point& left, const Point& right); // Арифметический оператор "сложение"
 Point operator-(const Point& left, const Point& right); // Арифметический оператор "вычитание"
 Point operator*(const Point& left, const Point& right); // Арифметический оператор "умножение"
@@ -146,12 +146,13 @@ public:
 		return *this;
 	}
 
-	friend bool operator==(const Point& left, const Point& right); //операторы сравнения подглядел только в этом месте в интренете
+	friend bool operator==(const Point& left, const Point& right); //операторы сравнения 
 	friend bool operator!=(const Point& left, const Point& right);
 	friend bool operator>(const Point& left, const Point& right);
 	friend bool operator<(const Point& left, const Point& right);
 	friend bool operator>=(const Point& left, const Point& right);
 	friend bool operator<=(const Point& left, const Point& right);
+	friend istream& operator>>(istream& in, Point& obj);           //для доступа прямого к х и у сделал оператор ввода дружественным
 
 	//                     Methods:
 	double distance(const Point& other) const // На всякий случай сделал метод, который вычисляет расстояние до указанной точки, от текущей точки
@@ -326,13 +327,26 @@ void main()
 	cout << "Проверяем сравненение А >= В:   " << (A >= B ? "true" : "false") << endl << endl;
 	cout << "A: " << A << ",     B: " << B << endl;
 	cout << "Проверяем сравненение А <= В:   " << (A <= B ? "true" : "false") << endl << endl;
+	Point C;
+	cout << "Проверяем cin, зададим координаты новой точке С!" << endl;
+	cin >> C;
+	cout << "Какие координаты записались в точку C: " << C << endl;
+	
 
 }
 
-ostream& operator<<(ostream& os, const Point& obj)           // Оператор потокового вывода
+ostream& operator<<(ostream& out, const Point& obj)           // Оператор потокового вывода
 {
-	return os << "X = " << obj.get_x() << "\tY = " << obj.get_y();
+	return out << "X = " << obj.get_x() << "\tY = " << obj.get_y();
 
+}
+istream& operator>>(istream& in, Point& obj)           // Оператор потокового вывода
+{
+	cout << "Введите значение Х: ";
+	in >> obj.x;
+	cout << "Введите значение Y: ";
+	in >> obj.y;
+	return in;
 }
 // Арифметические операторы
 Point operator+(const Point& left, const Point& right)       // Арифметический оператор "сложение"
