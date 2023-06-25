@@ -65,8 +65,17 @@ public:
 		cout << "Distructor:\t" << this << endl;
 	}
 	// ----------------------- Operators
+	//------------------------- FRIEND Operators
 	friend istream& operator>>(istream& in, Fraction& obj);
 	friend ostream& operator<<(ostream& out, const Fraction& obj);
+	friend bool operator ==(const Fraction& left, const Fraction& right);
+	friend bool operator !=(const Fraction& left, const Fraction& right);
+	friend bool operator >=(const Fraction& left, const Fraction& right);
+	friend bool operator <=(const Fraction& left, const Fraction& right);
+	friend bool operator >(const Fraction& left, const Fraction& right);
+	friend bool operator <(const Fraction& left, const Fraction& right);
+
+	//-----------------------------------------------
 	Fraction& operator=(const Fraction& other)
 	{
 		this->integer = other.integer;
@@ -234,6 +243,25 @@ void main()
 	A.reduction();
 	cout << "совершим действие А /= B, итого: " << A << endl;
 
+	//B = {2, 2, 4}; //Проверим на true ниже, специально делаю дроби с разным знаменателем, но должны быть равные
+	cout << "Сравним (оператор ==) дробь А = " << A << " с дробью В = " << B << endl;
+	cout << (A == B ? "True" : "False") << endl;
+
+	cout << "Сравним (оператор !=) дробь А = " << A << " с дробью В = " << B << endl;
+	cout << (A != B ? "True" : "False") << endl;
+
+	//A = B; // Проверка на true в оператарах <=&&>=, а так же на false в операторах ><
+	cout << "Сравним (оператор >=) дробь А = " << A << " с дробью В = " << B << endl;
+	cout << (A >= B ? "True" : "False") << endl;
+
+	cout << "Сравним (оператор <=) дробь А = " << A << " с дробью В = " << B << endl;
+	cout << (A <= B ? "True" : "False") << endl;
+	cout << "Сравним (оператор >) дробь А = " << A << " с дробью В = " << B << endl;
+	cout << (A > B ? "True" : "False") << endl;
+
+	cout << "Сравним (оператор <) дробь А = " << A << " с дробью В = " << B << endl;
+	cout << (A < B ? "True" : "False") << endl;
+
 }
 
 ostream& operator<<(ostream& out, const Fraction& obj)
@@ -288,4 +316,30 @@ Fraction operator/(const Fraction& left, const Fraction& right) // Операт�
 	double right_nominator = right.get_integer() * right.get_denominator() + right.get_numenator();
 
 	return Fraction(0, left_nominator * right.get_denominator(), left.get_denominator() * right_nominator);
+}
+
+//-------------------- bool Function and операторы сравнения
+bool operator ==(const Fraction& left, const Fraction& right)
+{
+	return ((left.integer * left.denominator * right.denominator + right.denominator * left.numenator) == (right.integer * right.denominator * left.denominator + left.denominator * right.numenator));
+}
+bool operator !=(const Fraction& left, const Fraction& right)
+{
+	return !(left == right);
+}
+bool operator >=(const Fraction& left, const Fraction& right)
+{
+	return ((left.integer * left.denominator * right.denominator + right.denominator * left.numenator) >= (right.integer * right.denominator * left.denominator + left.denominator * right.numenator));
+}
+bool operator <=(const Fraction& left, const Fraction& right)
+{
+	return ((left.integer * left.denominator * right.denominator + right.denominator * left.numenator) <= (right.integer * right.denominator * left.denominator + left.denominator * right.numenator));
+}
+bool operator >(const Fraction& left, const Fraction& right)
+{
+	return ((left.integer * left.denominator * right.denominator + right.denominator * left.numenator) > (right.integer * right.denominator * left.denominator + left.denominator * right.numenator));
+}
+bool operator <(const Fraction& left, const Fraction& right)
+{
+	return ((left.integer * left.denominator * right.denominator + right.denominator * left.numenator) < (right.integer * right.denominator * left.denominator + left.denominator * right.numenator));
 }
