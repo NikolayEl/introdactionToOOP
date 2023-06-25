@@ -12,7 +12,10 @@ class Point;
 ostream& operator<<(ostream& os, const Point& obj);     // Оператор потокового вывода
 Point operator+(const Point& left, const Point& right); // Арифметический оператор "сложение"
 Point operator-(const Point& left, const Point& right); // Арифметический оператор "вычитание"
+Point operator*(const Point& left, const Point& right); // Арифметический оператор "умножение"
+Point operator/(const Point& left, const Point& right); // Арифметический оператор "деление"
 Point operator-(const Point& other);					// Унарный минус
+Point operator+(const Point& other);					// Унарный плюс
 
 double distance(const Point& A, const Point& B);
 
@@ -235,6 +238,8 @@ void main()
 
 	cout << "B - A: " << B - A << endl;
 	cout << "-(B - A): " << -(B - A) << endl;
+	cout << "+(B - A): " << +(B - A) << endl;
+	cout << "A * B: " << A * B << endl;
 
 }
 
@@ -263,9 +268,17 @@ Point operator-(const Point& left, const Point& right)		 // Арифметиче
 {
 	return Point(left.get_x() - right.get_x(), left.get_y() - right.get_y());
 }
-Point operator-(const Point& other)
+Point operator*(const Point& left, const Point& right)      // Арифметический оператор "умножение"
+{
+	return Point(left.get_x() * right.get_x(), left.get_y() * right.get_y());
+}
+Point operator-(const Point& other)                          // Унарный минус
 {
 	return Point(-other.get_x(), -other.get_y());
+}
+Point operator+(const Point& other)					     // Унарный плюс
+{
+	return Point(+other.get_x(), +other.get_y());
 }
 
 double distance(const Point& A, const Point& B)
