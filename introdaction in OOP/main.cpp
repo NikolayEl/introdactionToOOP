@@ -43,14 +43,36 @@ public:
 	}
 	void set_denominator(double denominator)
 	{
+		if (denominator == 0) denominator = 1;
 		this->denominator = denominator;
 	}
 	// ----------------------- Constructors
-	Fraction(int integer = 0, double numenator = 0, double denominator = 1) //знаменатель 1 т.к. на 0 делить нельзя, а если разделить на 1 всегда будет в числителе тоже самое число
+	Fraction()
+	{
+		this->integer = 0;
+		this->numenator = 0;
+		this->denominator = 1;
+		cout << "DefaultConstraction:\t" << this << endl;
+	}
+	Fraction(int integer)
+	{
+		this->integer = integer;
+		this->numenator = 0;
+		this->denominator = 1;
+		cout << "ArgConstructor:\t" << this << endl;
+	}
+	Fraction(double numenator, double denominator)
+	{
+		this->integer = 0;
+		this->numenator = numenator;
+		set_denominator(denominator);
+		cout << "Constructor:\t" << this << endl;
+	}
+	Fraction(int integer, double numenator, double denominator) //знаменатель 1 т.к. на 0 делить нельзя, а если разделить на 1 всегда будет в числителе тоже самое число
 	{
 		this->integer = integer;
 		this->numenator = numenator;
-		this->denominator = denominator;
+		set_denominator(denominator);
 		cout << "Constructor:\t" << this << endl;
 	}
 	Fraction(const Fraction& other)
@@ -65,23 +87,13 @@ public:
 		cout << "Distructor:\t" << this << endl;
 	}
 	// ----------------------- Operators
-	//------------------------- FRIEND Operators
-	friend istream& operator>>(istream& in, Fraction& obj);
-	friend ostream& operator<<(ostream& out, const Fraction& obj);
-	friend bool operator ==(const Fraction& left, const Fraction& right);
-	friend bool operator !=(const Fraction& left, const Fraction& right);
-	friend bool operator >=(const Fraction& left, const Fraction& right);
-	friend bool operator <=(const Fraction& left, const Fraction& right);
-	friend bool operator >(const Fraction& left, const Fraction& right);
-	friend bool operator <(const Fraction& left, const Fraction& right);
-
 	//-----------------------------------------------
 	Fraction& operator=(const Fraction& other)
 	{
 		this->integer = other.integer;
 		this->numenator = other.numenator;
 		this->denominator = other.denominator;
-		cout << "CopyAssigment:\t" << this << endl;
+		cout << "CopyAssignment:\t" << this << endl;
 		return *this;
 	}
 	Fraction& operator-() // Унарный минус
@@ -150,6 +162,16 @@ public:
 		return *this;
 	}
 
+	//------------------------- FRIEND Operators
+	friend istream& operator>>(istream& in, Fraction& obj);
+	friend ostream& operator<<(ostream& out, const Fraction& obj);
+	friend bool operator ==(const Fraction& left, const Fraction& right);
+	friend bool operator !=(const Fraction& left, const Fraction& right);
+	friend bool operator >=(const Fraction& left, const Fraction& right);
+	friend bool operator <=(const Fraction& left, const Fraction& right);
+	friend bool operator >(const Fraction& left, const Fraction& right);
+	friend bool operator <(const Fraction& left, const Fraction& right);
+
 
 	// 
 	//------------------------ Methods
@@ -175,7 +197,8 @@ public:
 		reduction(); //Пока поставил на вывод, т.к. не происходит изменение числа, а только его сокращение, по сути число в целом остается тем же
 		if (denominator == 1 || numenator == 0)
 		{
-			cout << integer << endl;
+			if (integer)cout << integer;
+			else cout << 0;
 		}
 		else
 		{
@@ -185,14 +208,20 @@ public:
 
 };
 
+//#define HOME_WORK
+
 void main()
 {
 	setlocale(LC_ALL, "");
+#ifdef HOME_WORK
 	Fraction A(2, 22, 4);
+	Fraction B;
+	Fraction C;
+	cout << "B: " << B << ", C: " << C << endl;
 	cout << "Дробь А: " << A << endl;
 	A++;
 	cout << "A++: " << A << endl;
-	Fraction B = A;
+	B = A;
 	cout << "B = A: " << B << endl;
 	cout << "Унарный минус -A: " << -A << endl;
 	cout << "Унарный плюс +A: " << +A << endl;
@@ -202,7 +231,6 @@ void main()
 	cout << "Постфиксный инкремент A++: " << A << endl;
 	A--;
 	cout << "Постфиксный декремент A--: " << A << endl;
-	Fraction C;
 	cout << "Давайте зададим с клавиатуры дробь С" << endl;
 	cin >> C;
 	cout << "Дробь С: " << C << endl;
@@ -261,6 +289,7 @@ void main()
 
 	cout << "Сравним (оператор <) дробь А = " << A << " с дробью В = " << B << endl;
 	cout << (A < B ? "True" : "False") << endl;
+#endif //HOME_WORK
 
 }
 
@@ -272,7 +301,8 @@ ostream& operator<<(ostream& out, const Fraction& obj)
 	}
 	else
 	{
-		return out << obj.get_integer() << "(" << obj.get_numenator() << "/" << obj.get_denominator() << ")";
+		if(obj.integer) return out << obj.get_integer() << "(" << obj.get_numenator() << "/" << obj.get_denominator() << ")";
+		else return out <<  obj.get_numenator() << "/" << obj.get_denominator();
 	}
 }
 
