@@ -192,6 +192,19 @@ public:
 			}
 		}
 	}
+	void to_proper()
+	{
+		if (numenator >= denominator || -numenator >= denominator)
+		{
+			integer += (numenator / denominator);
+			numenator -= (int(numenator / denominator)) * denominator;
+			if (numenator < 0) numenator = -numenator; //чтобы знаменатель был не отрицательным
+		}
+	}
+	void to_improper()
+	{
+
+	}
 	void print()
 	{
 		reduction(); //Пока поставил на вывод, т.к. не происходит изменение числа, а только его сокращение, по сути число в целом остается тем же
