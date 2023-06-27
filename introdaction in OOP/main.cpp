@@ -177,12 +177,6 @@ public:
 	//------------------------ Methods
 	void reduction() //Перед любыми вычислениями и сравнениями хочу применять этот метод для соркащения дроби
 	{
-		if (numenator >= denominator || -numenator >= denominator)
-		{
-			integer += (numenator / denominator);
-			numenator -= (int(numenator / denominator)) * denominator;
-			if (numenator < 0) numenator = -numenator; //чтобы знаменатель был не отрицательным
-		}
 		for (int i = 2; i < 98; i++)  // Сделал сокращения до 97, больше нет смысла, не работаем обычно с большими числами
 		{
 			while (int(numenator) % i == 0 && int(denominator) % i == 0)
@@ -191,6 +185,8 @@ public:
 				denominator /= i;
 			}
 		}
+		if (numenator < 0) numenator = -numenator; //чтобы знаменатель был не отрицательным
+		if (numenator < 0 && integer > 0) integer = -integer; //в случае если минус не перенесся
 	}
 	void to_proper()
 	{
@@ -203,7 +199,11 @@ public:
 	}
 	void to_improper()
 	{
-
+		if (integer > 0)
+		{
+			numenator += integer * denominator;
+			integer = 0;
+		}
 	}
 	void print()
 	{
@@ -303,7 +303,14 @@ void main()
 	cout << "Сравним (оператор <) дробь А = " << A << " с дробью В = " << B << endl;
 	cout << (A < B ? "True" : "False") << endl;
 #endif //HOME_WORK
-
+	Fraction A(1, 4, 8);
+	cout << "Fraction A: " << A << endl;
+	A.to_improper();
+	cout << "Fraction A after to improper: " << A << endl;
+	A.to_proper();
+	cout << "Fraction A after to proper: " << A << endl;
+	A.reduction();
+	cout << "Fraction A after reduction: " << A << endl;
 }
 
 ostream& operator<<(ostream& out, const Fraction& obj)
