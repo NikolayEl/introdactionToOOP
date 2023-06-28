@@ -193,6 +193,7 @@ public:
 		if (numenator >= denominator || -numenator >= denominator)
 		{
 			integer += (numenator / denominator);
+			//numenator %= denominator; // Работает на инте, от ОА
 			numenator -= (int(numenator / denominator)) * denominator;
 			if (numenator < 0) numenator = -numenator; //чтобы знаменатель был не отрицательным
 		}
@@ -208,20 +209,25 @@ public:
 	void print()
 	{
 		reduction(); //Пока поставил на вывод, т.к. не происходит изменение числа, а только его сокращение, по сути число в целом остается тем же
+		if (integer)cout << integer;
 		if (denominator == 1 || numenator == 0)
 		{
-			if (integer)cout << integer;
-			else cout << 0;
+			cout << 0;
+		}
+		else if (integer > 0)
+		{
+			cout << "(" << numenator << "/" << denominator << ")" << endl;
 		}
 		else
 		{
-			cout << integer << "(" << numenator << "/" << denominator << ")" << endl;
+			cout << numenator << "/" << denominator << endl;
 		}
 	}
 
 };
 
 //#define HOME_WORK
+//#define HOME_WORK2
 
 void main()
 {
@@ -303,6 +309,7 @@ void main()
 	cout << "Сравним (оператор <) дробь А = " << A << " с дробью В = " << B << endl;
 	cout << (A < B ? "True" : "False") << endl;
 #endif //HOME_WORK
+#ifdef HOME_WORK2
 	Fraction A(1, 4, 8);
 	cout << "Fraction A: " << A << endl;
 	A.to_improper();
@@ -311,6 +318,18 @@ void main()
 	cout << "Fraction A after to proper: " << A << endl;
 	A.reduction();
 	cout << "Fraction A after reduction: " << A << endl;
+#endif //HOME_WORK2
+
+	Fraction A(2, 3, 4);
+	A.print();
+
+	Fraction B(3, 4, 5);
+	B.print();
+	
+	Fraction C = A * B;
+	C.print();
+	C.to_proper();
+	C.print();
 }
 
 ostream& operator<<(ostream& out, const Fraction& obj)
