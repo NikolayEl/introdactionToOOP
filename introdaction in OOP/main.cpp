@@ -10,7 +10,7 @@ istream& operator>>(istream& in, Fraction& obj);
 
 Fraction operator+(const Fraction& left, const Fraction& right);
 Fraction operator-(const Fraction& left, const Fraction& right);
-Fraction operator*(const Fraction& left, const Fraction& right);
+Fraction operator*(Fraction left, Fraction right);
 Fraction operator/(const Fraction& left, const Fraction& right);
 
 class Fraction
@@ -139,19 +139,19 @@ public:
 	}
 	Fraction operator-=(const Fraction& other)
 	{
-		this->numerator *= other.denominator;
-		this->denominator *= other.denominator;
-		this->numerator = (this->integer * this->denominator + this->numerator) - (this->denominator * other.integer + other.numerator * (this->denominator / other.denominator));
-		this->integer = 0;
-		return *this;
+		//this->numerator *= other.denominator;
+		//this->denominator *= other.denominator;
+		//this->numerator = (this->integer * this->denominator + this->numerator) - (this->denominator * other.integer + other.numerator * (this->denominator / other.denominator));
+		//this->integer = 0;
+		return (*this = *this - other).to_proper();
 	}
-	Fraction operator*=(const Fraction& other)
+	Fraction& operator*=(const Fraction& other)
 	{
-		this->numerator += this->integer * this->denominator;
-		this->integer = 0;
-		this->numerator *= other.integer * other.denominator + other.numerator;
-		this->denominator *= other.denominator;
-		return *this;
+		//this->numerator += this->integer * this->denominator;
+		//this->integer = 0;
+		//this->numerator *= other.integer * other.denominator + other.numerator;
+		//this->denominator *= other.denominator;
+		return *this = (*this * other).to_proper(); //code with OA
 	}
 	Fraction operator/=(const Fraction& other)
 	{
@@ -190,33 +190,53 @@ public:
 	}
 	Fraction& to_proper()
 	{
+		if (denominator < 0)
+		{
+			denominator = -denominator;
+			integer = -integer;
+		}
 		if (numerator >= denominator || -numerator >= denominator)
 		{
 			integer += (numerator / denominator);
 			//numenator %= denominator; // Работает на инте, от ОА
 			numerator -= (int(numerator / denominator)) * denominator;
 			if (numerator < 0) numerator = -numerator; //чтобы знаменатель был не отрицательным
+			if (numerator < 0 && integer > 0) integer = -integer;
 		}
 		return *this;
 	}
 	Fraction& to_improper()
 	{
-		if (integer > 0)
+		if (integer < 0) numerator = -numerator; //сделано при работе с отрицательными числами
+		if (denominator < 0)
 		{
-			numerator += integer * denominator;
-			integer = 0;
+			denominator = -denominator;
+			integer = -integer;
 		}
+		numerator += integer * denominator;
+		integer = 0;
 		return *this;
 	}
-	void print()
+	Fraction inverted() const
 	{
-		reduction(); //Пока поставил на вывод, т.к. не происходит изменение числа, а только его сокращение, по сути число в целом остается тем же
+		Fraction inverted = *this;
+		inverted.to_improper();
+		if (numerator < 0)
+		{
+			inverted.denominator = -inverted.denominator;
+			inverted.numerator = -inverted.numerator;
+		}
+		std::swap(inverted.numerator, inverted.denominator);
+		return inverted;
+	}
+	void print() const
+	{
 		if (integer)cout << integer;
-		if (denominator == 1 || numerator == 0)
+		if (!numerator && !integer)
 		{
 			cout << 0;
 		}
-		else if (integer > 0)
+		else if (integer != 0)
 		{
 			cout << "(" << numerator << "/" << denominator << ")" << endl;
 		}
@@ -328,13 +348,36 @@ void main()
 	Fraction B(3, 4, 5);
 	B.print();
 	
-	Fraction C = A * B;
-	C.print();
+	//Fraction C = A * B;
+	//C.print();
+
+	//Fraction D = A / B;
+	//D.print();
+
+	A -= B;
+	A.print();
+	cout << A << endl;
+	A.to_improper();
+	A.print();
+	A.to_proper();
+	A.print();
+	B.print();
+	B = -B;
+	B.to_improper();
+	B.print();
+	A.to_improper();
+	A.print();
+	cout << B.inverted() << endl;
+	cout << A / -B << endl;
+	((A / -B)+ 10).to_proper().print();
+	
+
 }
 
 ostream& operator<<(ostream& out, const Fraction& obj)
 {
-	if (obj.get_denominator() == 1 || obj.get_numerator() == 0)
+	if (!obj.get_integer() && !obj.get_numerator()) return out << 0;
+	if (obj.get_numerator() == 0 && obj.get_integer() > 0)
 	{
 		return out << obj.get_integer();
 	}
@@ -371,23 +414,22 @@ Fraction operator-(const Fraction& left, const Fraction& right) // Операт�
 	double right_nominator = right.get_integer() * common_denominator + (right.get_numerator() * left.get_denominator());
 	return Fraction(0, left_nominator - right_nominator, common_denominator);
 }
-Fraction operator*(const Fraction& left, const Fraction& right) // Оператор вычитания
+Fraction operator*(Fraction left, Fraction right) // Оператор умножения
 {
-	double common_denominator = left.get_denominator() * right.get_denominator();
-	double left_nominator = left.get_integer() * left.get_denominator() + left.get_numerator();
-	double right_nominator = right.get_integer() * right.get_denominator() + right.get_numerator();
-	//left.to_improper();
-	//right.to_improper();
-	//return Fraction(left.get_numerator()*right.numerator(), left.get_numerator()*right.get.numerator()).to_proper();)
-
-	return Fraction(0, left_nominator * right_nominator, common_denominator).to_proper();
+	left.to_improper();
+	right.to_improper();
+	return Fraction(left.get_numerator() * right.get_numerator(), left.get_denominator() * right.get_denominator()).to_proper();
 }
 Fraction operator/(const Fraction& left, const Fraction& right) // Оператор вычитания
 {
-	double left_nominator = left.get_integer() * left.get_denominator() + left.get_numerator();
-	double right_nominator = right.get_integer() * right.get_denominator() + right.get_numerator();
-
-	return Fraction(0, left_nominator * right.get_denominator(), left.get_denominator() * right_nominator);
+//	double left_nominator = left.get_integer() * left.get_denominator() + left.get_numerator();
+//	double right_nominator = right.get_integer() * right.get_denominator() + right.get_numerator();
+//	//left.to_improper();
+////right.to_improper();
+////return Fraction(left.get_numerator()*right.get.numerator(), left.get_numerator()*right.numerator()).to_proper();)
+//	//или
+	 return left * right.inverted();
+//	return Fraction(0, left_nominator * right.get_denominator(), left.get_denominator() * right_nominator).to_proper();
 }
 
 //-------------------- bool Function and операторы сравнения
