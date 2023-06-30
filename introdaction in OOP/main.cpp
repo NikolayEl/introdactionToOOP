@@ -175,18 +175,24 @@ public:
 
 	// 
 	//------------------------ Methods
-	void reduction() //Перед любыми вычислениями и сравнениями хочу применять этот метод для соркащения дроби
+	Fraction& reduction() //Перед любыми вычислениями и сравнениями хочу применять этот метод для соркащения дроби
 	{
-		for (int i = 2; i < 98; i++)  // Сделал сокращения до 97, больше нет смысла, не работаем обычно с большими числами
+
+		//------------------------------------------- Сделаю сокращение по Евклиду
+		double max = denominator, min = numerator, temp;
+		if (numerator > denominator) max = numerator, min = denominator; 
+		while (max != min)
 		{
-			while (int(numerator) % i == 0 && int(denominator) % i == 0)
-			{
-				numerator /= i;
-				denominator /= i;
-			}
+			max = max - min;
+			if (max < min) temp = min, min = max, max = temp;
 		}
+		numerator /= min;
+		denominator /= min;
+		//-------------------------------------------
+
 		if (numerator < 0) numerator = -numerator; //чтобы знаменатель был не отрицательным
 		if (numerator < 0 && integer > 0) integer = -integer; //в случае если минус не перенесся
+		return *this;
 	}
 	Fraction& to_proper()
 	{
@@ -370,6 +376,10 @@ void main()
 	cout << B.inverted() << endl;
 	cout << A / -B << endl;
 	((A / -B)+ 10).to_proper().print();
+	Fraction C(2695, 3465); //Проверка сокращения по Евклиду
+	C.print();
+	C.reduction();
+	C.print();
 	
 
 }
