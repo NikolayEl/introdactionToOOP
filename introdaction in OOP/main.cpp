@@ -430,7 +430,6 @@ Fraction operator/(const Fraction& left, const Fraction& right) // Операт�
 //-------------------- bool Function and операторы сравнения
 bool operator ==(const Fraction& left, const Fraction& right)
 {
-	//return ((left.integer  + left.numerator / left.denominator) == (right.integer + right.numerator / right.denominator));
 	return ((left.get_integer() * left.get_denominator() * right.get_denominator() + right.get_denominator() * left.get_numerator()) == (right.get_integer() * right.get_denominator() * left.get_denominator() + left.get_denominator() * right.get_numerator()));
 }
 bool operator !=(const Fraction& left, const Fraction& right) //Единственное сравнение, которое можно взять от обратного
@@ -439,21 +438,17 @@ bool operator !=(const Fraction& left, const Fraction& right) //Единстве
 }
 bool operator >=(const Fraction& left, const Fraction& right)
 {
-	//return ((left.integer + left.numerator / left.denominator) >= (right.integer + right.numerator / right.denominator));
 	return ((left.get_integer() * left.get_denominator() * right.get_denominator() + right.get_denominator() * left.get_numerator()) >= (right.get_integer() * right.get_denominator() * left.get_denominator() + left.get_denominator() * right.get_numerator()));
 }
 bool operator <=(const Fraction& left, const Fraction& right)
 {
-	//return ((left.integer + left.numerator / left.denominator) <= (right.integer + right.numerator / right.denominator));
 	return ((left.get_integer() * left.get_denominator() * right.get_denominator() + right.get_denominator() * left.get_numerator()) <= (right.get_integer() * right.get_denominator() * left.get_denominator() + left.get_denominator() * right.get_numerator()));
 }
 bool operator >(const Fraction& left, const Fraction& right)
 {
-	//return ((left.integer + left.numerator / left.denominator) > (right.integer + right.numerator / right.denominator));
-	return ((left.get_integer() * left.get_denominator() * right.get_denominator() + right.get_denominator() * left.get_numerator()) > (right.get_integer() * right.get_denominator() * left.get_denominator() + left.get_denominator() * right.get_numerator()));
+	return !(left <= right);
 }
 bool operator <(const Fraction& left, const Fraction& right)
 {
-	//return ((left.integer + left.numerator / left.denominator) < (right.integer + right.numerator / right.denominator));
-	return ((left.get_integer() * left.get_denominator() * right.get_denominator() + right.get_denominator() * left.get_numerator()) < (right.get_integer() * right.get_denominator() * left.get_denominator() + left.get_denominator() * right.get_numerator()));
+	return !(left >= right);
 }
