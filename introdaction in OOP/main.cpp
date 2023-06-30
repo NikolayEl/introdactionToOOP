@@ -165,31 +165,31 @@ public:
 		//this->denominator *= other.integer * other.denominator + other.numerator;
 		return (*this = *this * other.inverted()).to_proper();
 	}
-	bool operator ==(const Fraction& right) //Все операторы сравнения построил на приведеление дроби в неправильную и к одному знаменателю, а после сравнение их числителей
+	bool operator ==(const Fraction& right) const //Все операторы сравнения построил на приведеление дроби в неправильную и к одному знаменателю, а после сравнение их числителей
 	{
 		//return ((left.integer  + left.numerator / left.denominator) == (right.integer + right.numerator / right.denominator)); //Один из вариантов исполнения, но считаю его ненадежным, могут быть ошибки ИМХО
 		return ((integer * denominator * right.denominator + right.denominator * numerator) == (right.integer * right.denominator * denominator + denominator * right.numerator)); //пропуская шаги, сразу сравниваю числители
 	}
-	bool operator !=(const Fraction& right)
+	bool operator !=(const Fraction& right) const
 	{
 		return !(*this == right); // единственное где можно пойти от обратного
 	}
-	bool operator <=(const Fraction& right) 
+	bool operator <=(const Fraction& right) const
 	{
 		//return ((left.integer  + left.numerator / left.denominator) <= (right.integer + right.numerator / right.denominator));
 		return ((integer * denominator * right.denominator + right.denominator * numerator) <= (right.integer * right.denominator * denominator + denominator * right.numerator));
 	}
-	bool operator >=(const Fraction& right) //от обратного не пойти - уйдет равно
+	bool operator >=(const Fraction& right) const //от обратного не пойти - уйдет равно
 	{
 		//return ((left.integer  + left.numerator / left.denominator) >= (right.integer + right.numerator / right.denominator));
 		return ((integer * denominator * right.denominator + right.denominator * numerator) >= (right.integer * right.denominator * denominator + denominator * right.numerator));
 	}
-	bool operator < (const Fraction& right) 
+	bool operator < (const Fraction& right) const
 	{
 		//return ((left.integer  + left.numerator / left.denominator) < (right.integer + right.numerator / right.denominator));
 		return ((integer * denominator * right.denominator + right.denominator * numerator) < (right.integer * right.denominator * denominator + denominator * right.numerator));
 	}
-	bool operator > (const Fraction& right) // от обратного не пойти добавится равно
+	bool operator > (const Fraction& right) const // от обратного не пойти добавится равно
 	{
 		//return ((left.integer  + left.numerator / left.denominator) > (right.integer + right.numerator / right.denominator));
 		return ((integer * denominator * right.denominator + right.denominator * numerator) > (right.integer * right.denominator * denominator + denominator * right.numerator));
