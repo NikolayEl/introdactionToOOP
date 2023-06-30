@@ -156,7 +156,7 @@ public:
 	//------------------------ Methods
 	Fraction& reduction() //reduce() - по заданию ОА
 	{
-
+		//Сделал его Function
 		//------------------------------------------- Сделаю сокращение по Евклиду
 		double max = (denominator > 0?denominator:-denominator), min = (numerator > 0 ? numerator:-numerator), temp;
 		if (min > max) max = (numerator > 0 ? numerator : -numerator), min = (denominator > 0 ? denominator : -denominator); // беру значение max&min по модулю ибо знак не влияет на итоговый НОД (наибольший общий делитель)
@@ -433,7 +433,7 @@ bool operator ==(const Fraction& left, const Fraction& right)
 	//return ((left.integer  + left.numerator / left.denominator) == (right.integer + right.numerator / right.denominator));
 	return ((left.get_integer() * left.get_denominator() * right.get_denominator() + right.get_denominator() * left.get_numerator()) == (right.get_integer() * right.get_denominator() * left.get_denominator() + left.get_denominator() * right.get_numerator()));
 }
-bool operator !=(const Fraction& left, const Fraction& right)
+bool operator !=(const Fraction& left, const Fraction& right) //Единственное сравнение, которое можно взять от обратного
 {
 	return !(left == right);
 }
