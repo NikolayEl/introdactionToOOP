@@ -131,14 +131,16 @@ public:
 
 	Fraction operator+=(const Fraction& other)
 	{
-		this->numerator *= other.denominator;
-		this->denominator *= other.denominator;
-		this->numerator = (this->integer * this->denominator + this->numerator) + (this->denominator * other.integer + other.numerator * (this->denominator / other.denominator));
-		this->integer = 0;
-		return *this;
+		// Старый код
+		//this->numerator *= other.denominator;
+		//this->denominator *= other.denominator;
+		//this->numerator = (this->integer * this->denominator + this->numerator) + (this->denominator * other.integer + other.numerator * (this->denominator / other.denominator));
+		//this->integer = 0;
+		return (*this = *this + other).to_proper();
 	}
 	Fraction operator-=(const Fraction& other)
 	{
+		// Старый код
 		//this->numerator *= other.denominator;
 		//this->denominator *= other.denominator;
 		//this->numerator = (this->integer * this->denominator + this->numerator) - (this->denominator * other.integer + other.numerator * (this->denominator / other.denominator));
@@ -147,19 +149,21 @@ public:
 	}
 	Fraction& operator*=(const Fraction& other)
 	{
-		//this->numerator += this->integer * this->denominator;
+		// Старый код
+		//this->numerator += this->integer * this->denominator; 
 		//this->integer = 0;
 		//this->numerator *= other.integer * other.denominator + other.numerator;
 		//this->denominator *= other.denominator;
-		return *this = (*this * other).to_proper(); //code with OA
+		return (*this = *this * other).to_proper(); //code with OA
 	}
-	Fraction operator/=(const Fraction& other)
+	Fraction& operator/=(const Fraction& other)
 	{
-		this->numerator += this->integer * this->denominator;
-		this->integer = 0;
-		this->numerator *= other.denominator;
-		this->denominator *= other.integer * other.denominator + other.numerator;
-		return *this;
+		// Старый код
+		//this->numerator += this->integer * this->denominator;
+		//this->integer = 0;
+		//this->numerator *= other.denominator;
+		//this->denominator *= other.integer * other.denominator + other.numerator;
+		return (*this = *this * other.inverted()).to_proper();
 	}
 
 	//------------------------- FRIEND Operators
@@ -175,12 +179,12 @@ public:
 
 	// 
 	//------------------------ Methods
-	Fraction& reduction() //Перед любыми вычислениями и сравнениями хочу применять этот метод для соркащения дроби
+	Fraction& reduction() 
 	{
 
 		//------------------------------------------- Сделаю сокращение по Евклиду
-		double max = denominator, min = numerator, temp;
-		if (numerator > denominator) max = numerator, min = denominator; 
+		double max = (denominator > 0?denominator:-denominator), min = (numerator > 0 ? numerator:-numerator), temp;
+		if (min > max) max = (numerator > 0 ? numerator : -numerator), min = (denominator > 0 ? denominator : -denominator); // беру значение max&min по модулю ибо знак не влияет на итоговый НОД (наибольший общий делитель)
 		while (max != min)
 		{
 			max = max - min;
@@ -190,8 +194,8 @@ public:
 		denominator /= min;
 		//-------------------------------------------
 
-		if (numerator < 0) numerator = -numerator; //чтобы знаменатель был не отрицательным
-		if (numerator < 0 && integer > 0) integer = -integer; //в случае если минус не перенесся
+		if (numerator < 0 && integer < 0) numerator = -numerator; //чтобы знаменатель был не отрицательным
+		if (numerator < 0 && integer > 0) integer = -integer, numerator = -numerator; //в случае если минус не перенесся
 		return *this;
 	}
 	Fraction& to_proper()
@@ -254,8 +258,9 @@ public:
 
 };
 
-//#define HOME_WORK
+#define HOME_WORK
 //#define HOME_WORK2
+//#define HOME_WORK3
 
 void main()
 {
@@ -279,16 +284,20 @@ void main()
 	A--;
 	cout << "Постфиксный декремент A--: " << A << endl;
 	cout << "Давайте зададим с клавиатуры дробь С" << endl;
-	cin >> C;
+	C = { 0, 1 , 2 };
 	cout << "Дробь С: " << C << endl;
 	B = { 0, 11, 3 };
 	A.reduction();
+	A.to_proper();
+	B.to_proper();
 	B.reduction();
 	C = (A + B);
 	C.reduction();
+	C.to_proper();
 	cout << "Сложим дроби A: " << A << " и B: " << B << " = " <<  A + B << ", Сокращенно: " << C << endl;
-	C = (A - B);
+	C = A - B;
 	C.reduction();
+	C.to_proper();
 	cout << "Вычтем дроби A: " << A << " и B: " << B << " = " << A - B << ", Сокращенно: " << C << endl;
 	C = (A * B);
 	C.reduction();
@@ -314,7 +323,6 @@ void main()
 	
 	cout << "С дробью А = " << A << " и дробью В = " << B << endl;
 	A /= B;
-	cout << A << endl;
 	A.reduction();
 	cout << "совершим действие А /= B, итого: " << A << endl;
 
@@ -348,6 +356,7 @@ void main()
 	cout << "Fraction A after reduction: " << A << endl;
 #endif //HOME_WORK2
 
+#ifdef HOME_WORK3
 	Fraction A(2, 3, 4);
 	A.print();
 
@@ -380,7 +389,8 @@ void main()
 	C.print();
 	C.reduction();
 	C.print();
-	
+#endif //HOME_WORK3
+
 
 }
 
@@ -445,6 +455,7 @@ Fraction operator/(const Fraction& left, const Fraction& right) // Операт�
 //-------------------- bool Function and операторы сравнения
 bool operator ==(const Fraction& left, const Fraction& right)
 {
+	//return ((left.integer  + left.numerator / left.denominator) == (right.integer + right.numerator / right.denominator));
 	return ((left.integer * left.denominator * right.denominator + right.denominator * left.numerator) == (right.integer * right.denominator * left.denominator + left.denominator * right.numerator));
 }
 bool operator !=(const Fraction& left, const Fraction& right)
@@ -453,17 +464,21 @@ bool operator !=(const Fraction& left, const Fraction& right)
 }
 bool operator >=(const Fraction& left, const Fraction& right)
 {
+	//return ((left.integer + left.numerator / left.denominator) >= (right.integer + right.numerator / right.denominator));
 	return ((left.integer * left.denominator * right.denominator + right.denominator * left.numerator) >= (right.integer * right.denominator * left.denominator + left.denominator * right.numerator));
 }
 bool operator <=(const Fraction& left, const Fraction& right)
 {
+	//return ((left.integer + left.numerator / left.denominator) <= (right.integer + right.numerator / right.denominator));
 	return ((left.integer * left.denominator * right.denominator + right.denominator * left.numerator) <= (right.integer * right.denominator * left.denominator + left.denominator * right.numerator));
 }
 bool operator >(const Fraction& left, const Fraction& right)
 {
+	//return ((left.integer + left.numerator / left.denominator) > (right.integer + right.numerator / right.denominator));
 	return ((left.integer * left.denominator * right.denominator + right.denominator * left.numerator) > (right.integer * right.denominator * left.denominator + left.denominator * right.numerator));
 }
 bool operator <(const Fraction& left, const Fraction& right)
 {
+	//return ((left.integer + left.numerator / left.denominator) < (right.integer + right.numerator / right.denominator));
 	return ((left.integer * left.denominator * right.denominator + right.denominator * left.numerator) < (right.integer * right.denominator * left.denominator + left.denominator * right.numerator));
 }
