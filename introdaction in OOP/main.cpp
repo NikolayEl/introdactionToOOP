@@ -168,36 +168,36 @@ public:
 	bool operator ==(const Fraction& right) //Все операторы сравнения построил на приведеление дроби в неправильную и к одному знаменателю, а после сравнение их числителей
 	{
 		//return ((left.integer  + left.numerator / left.denominator) == (right.integer + right.numerator / right.denominator)); //Один из вариантов исполнения, но считаю его ненадежным, могут быть ошибки ИМХО
-		return ((integer * denominator * right.denominator + right.denominator * numerator) == (right.integer * right.denominator * denominator + denominator * right.numerator));
+		return ((integer * denominator * right.denominator + right.denominator * numerator) == (right.integer * right.denominator * denominator + denominator * right.numerator)); //пропуская шаги, сразу сравниваю числители
 	}
 	bool operator !=(const Fraction& right)
 	{
-		return !(*this == right);
+		return !(*this == right); // единственное где можно пойти от обратного
 	}
-	bool operator <=(const Fraction& right)
+	bool operator <=(const Fraction& right) 
 	{
 		//return ((left.integer  + left.numerator / left.denominator) <= (right.integer + right.numerator / right.denominator));
 		return ((integer * denominator * right.denominator + right.denominator * numerator) <= (right.integer * right.denominator * denominator + denominator * right.numerator));
 	}
-	bool operator >=(const Fraction& right)
+	bool operator >=(const Fraction& right) //от обратного не пойти - уйдет равно
 	{
 		//return ((left.integer  + left.numerator / left.denominator) >= (right.integer + right.numerator / right.denominator));
 		return ((integer * denominator * right.denominator + right.denominator * numerator) >= (right.integer * right.denominator * denominator + denominator * right.numerator));
 	}
-	bool operator < (const Fraction& right)
+	bool operator < (const Fraction& right) 
 	{
 		//return ((left.integer  + left.numerator / left.denominator) < (right.integer + right.numerator / right.denominator));
 		return ((integer * denominator * right.denominator + right.denominator * numerator) < (right.integer * right.denominator * denominator + denominator * right.numerator));
 	}
-	bool operator > (const Fraction& right)
+	bool operator > (const Fraction& right) // от обратного не пойти добавится равно
 	{
 		//return ((left.integer  + left.numerator / left.denominator) > (right.integer + right.numerator / right.denominator));
 		return ((integer * denominator * right.denominator + right.denominator * numerator) > (right.integer * right.denominator * denominator + denominator * right.numerator));
 	}
 
 	//------------------------- FRIEND Operators
-	friend istream& operator>>(istream& in, Fraction& obj);
-	friend ostream& operator<<(ostream& out, const Fraction& obj);
+	//friend istream& operator>>(istream& in, Fraction& obj);
+	//friend ostream& operator<<(ostream& out, const Fraction& obj);
 	//friend bool operator ==(const Fraction& left, const Fraction& right);
 	//friend bool operator !=(const Fraction& left, const Fraction& right);
 	//friend bool operator >=(const Fraction& left, const Fraction& right);
@@ -297,6 +297,8 @@ void main()
 #ifdef HOME_WORK
 	Fraction A(2, 22, 4);
 	Fraction B;
+	cin >> B;
+	B.print();
 	Fraction C;
 	cout << "B: " << B << ", C: " << C << endl;
 	cout << "Дробь А: " << A << endl;
@@ -432,19 +434,24 @@ ostream& operator<<(ostream& out, const Fraction& obj)
 	}
 	else
 	{
-		if(obj.integer) return out << obj.get_integer() << "(" << obj.get_numerator() << "/" << obj.get_denominator() << ")";
+		if(obj.get_integer()) return out << obj.get_integer() << "(" << obj.get_numerator() << "/" << obj.get_denominator() << ")";
 		else return out <<  obj.get_numerator() << "/" << obj.get_denominator();
 	}
 }
 
 istream& operator>>(istream& in, Fraction& obj)
 {
+	int temp_int;
+	double temp_num, temp_den;
 	cout << "Ввведите целую часть дроби: ";
-	in >> obj.integer;
+	in >> temp_int;
+	obj.set_integer(temp_int);
 	cout << "Введите числитель: ";
-	in >> obj.numerator;
+	in >> temp_num;
+	obj.set_numerator(temp_num);
 	cout << "Введите знаменатель: ";
-	in >> obj.denominator;
+	in >> temp_den;
+	obj.set_denominator(temp_den);
 	return in;
 }
 
