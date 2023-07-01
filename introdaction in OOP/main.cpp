@@ -20,6 +20,8 @@ bool operator <=(const Fraction& left, const Fraction& right);
 bool operator >(const Fraction& left, const Fraction& right);
 bool operator <(const Fraction& left, const Fraction& right);
 
+int& number_simbol_after(double const& number);
+
 class Fraction
 {
 	int integer;
@@ -60,6 +62,15 @@ public:
 		this->numerator = 0;
 		this->denominator = 1;
 		cout << "DefaultConstraction:\t" << this << endl;
+	}
+	Fraction(double const number)
+	{
+		this->integer = (int)number;
+		this->numerator = number - integer;
+		this->denominator = 1;
+		for (int i = 0; i < number_simbol_after(number); i++) this->numerator *= 10, this->denominator *= 10;
+		cout << "TypeDoubleConstructor:\t" << this << endl;
+		//this->reduce(); Не уверен, что сокращать в конструктуре - это верно!
 	}
 	Fraction(int integer)
 	{
@@ -292,7 +303,7 @@ void main()
 	C = (A + B);
 	C.reduction();
 	C.to_proper();
-	cout << "Сложим дроби A: " << A << " и B: " << B << " = " <<  A + B << ", Сокращенно: " << C << endl;
+	cout << "Сложим дроби A: " << A << " и B: " << B << " = " << A + B << ", Сокращенно: " << C << endl;
 	C = A - B;
 	C.reduction();
 	C.to_proper();
@@ -318,7 +329,7 @@ void main()
 	A *= B;
 	A.reduction();
 	cout << "совершим действие А *= B, итого: " << A << endl;
-	
+
 	cout << "С дробью А = " << A << " и дробью В = " << B << endl;
 	A /= B;
 	A.reduction();
@@ -360,7 +371,7 @@ void main()
 
 	Fraction B(3, 16, 20);
 	B.print();
-	
+
 	//Fraction C = A * B;
 	//C.print();
 
@@ -383,19 +394,15 @@ void main()
 	A.print();
 	cout << B.inverted() << endl;
 	cout << A / -B << endl;
-	((A / -B)+ 10).to_proper().print();
+	((A / -B) + 10).to_proper().print();
 	Fraction C(2695, 3465); //Проверка сокращения по Евклиду
 	C.print();
 	C.reduction();
 	C.print();
 #endif //HOME_WORK3
-	Fraction A(540, 3600);
-	A.print();
-	A.reduce();
-	A.print();
+	Fraction A = 2.75;
 	cout << A << endl;
 }
-
 ostream& operator<<(ostream& out, const Fraction& obj)
 {
 	if (!obj.get_integer() && !obj.get_numerator()) return out << 0;
@@ -479,4 +486,16 @@ bool operator >(const Fraction& left, const Fraction& right)
 bool operator <(const Fraction& left, const Fraction& right)
 {
 	return !(left >= right);
+}
+
+int& number_simbol_after(double const& number)
+{
+	int count = 0;
+	double temp = number;
+	while (temp != double(int(temp)))
+	{
+		temp *= 10;
+		count++;
+	}
+	return count;
 }
