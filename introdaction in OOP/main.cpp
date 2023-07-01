@@ -427,10 +427,10 @@ istream& operator>>(istream& in, Fraction& obj)
 	in >> temp_int;
 	if (int(temp_int) < temp_int) //Простая проверка на тип данных ввели целое число или дробное
 	{
-		Fraction A = temp_int;
-		obj.set_integer(A.get_integer());
-		obj.set_numerator(A.get_numerator());
-		obj.set_denominator(A.get_denominator());
+		Fraction Temp_A = temp_int;
+		obj.set_integer(Temp_A.get_integer());
+		obj.set_numerator(Temp_A.get_numerator());
+		obj.set_denominator(Temp_A.get_denominator());
 	}
 	else
 	{
