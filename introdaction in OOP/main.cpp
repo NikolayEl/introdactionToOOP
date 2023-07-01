@@ -402,6 +402,9 @@ void main()
 #endif //HOME_WORK3
 	Fraction A = 2.75;
 	cout << A << endl;
+	cout << "Введите число либо последовательно целую часть, числитель и знаминатель, либо сразу дробь в десятичном виде: ";
+	cin >> A; //Можно ввести в десятичном виде 2.75
+	cout << A << endl;
 }
 ostream& operator<<(ostream& out, const Fraction& obj)
 {
@@ -419,17 +422,25 @@ ostream& operator<<(ostream& out, const Fraction& obj)
 
 istream& operator>>(istream& in, Fraction& obj)
 {
-	int temp_int;
+	double temp_int;
 	double temp_num, temp_den;
-	cout << "Ввведите целую часть дроби: ";
 	in >> temp_int;
-	obj.set_integer(temp_int);
-	cout << "Введите числитель: ";
-	in >> temp_num;
-	obj.set_numerator(temp_num);
-	cout << "Введите знаменатель: ";
-	in >> temp_den;
-	obj.set_denominator(temp_den);
+	if (int(temp_int) < temp_int) //Простая проверка на тип данных ввели целое число или дробное
+	{
+		Fraction A = temp_int;
+		obj.set_integer(A.get_integer());
+		obj.set_numerator(A.get_numerator());
+		obj.set_denominator(A.get_denominator());
+	}
+	else
+	{
+		obj.set_integer(temp_int);
+		in >> temp_num;
+		obj.set_numerator(temp_num);
+		in >> temp_den;
+		obj.set_denominator(temp_den);
+
+	}
 	return in;
 }
 
