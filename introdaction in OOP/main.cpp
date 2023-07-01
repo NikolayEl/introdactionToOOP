@@ -492,10 +492,6 @@ int& number_simbol_after(double const& number)
 {
 	int count = 0;
 	double temp = number;
-	while (temp != double(int(temp)))
-	{
-		temp *= 10;
-		count++;
-	}
+	while (temp != double(int(temp))) temp *= 10, count++;
 	return count;
 }
