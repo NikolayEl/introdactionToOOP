@@ -1,4 +1,6 @@
-﻿#include <iostream>
+﻿#define _CRT_SECURE_NO_WARNINGS
+
+#include <iostream>
 
 using namespace std;
 using std::cin;
@@ -169,6 +171,7 @@ public:
 	{
 		//Сделал его Function
 		//------------------------------------------- Сделаю сокращение по Евклиду
+		if (this->numerator == 0) return *this;
 		double max = (denominator > 0?denominator:-denominator), min = (numerator > 0 ? numerator:-numerator), temp;
 		if (min > max) max = (numerator > 0 ? numerator : -numerator), min = (denominator > 0 ? denominator : -denominator); // беру значение max&min по модулю ибо знак не влияет на итоговый НОД (наибольший общий делитель)
 		while (max != min)
@@ -190,6 +193,7 @@ public:
 		//int more, less, rest;
 		//if (numerator > denominator) more = numerator, less = denominator;
 		//else more = denominator, less = numerator;
+		if (this->numerator == 0) return *this;
 		to_proper();
 		int more = denominator;
 		int less = numerator;
@@ -268,6 +272,8 @@ public:
 //#define HOME_WORK
 //#define HOME_WORK2
 //#define HOME_WORK3
+//#define INPUT_CHEK_1
+//#define INPUT_CHEK_2
 
 void main()
 {
@@ -400,11 +406,31 @@ void main()
 	C.reduction();
 	C.print();
 #endif //HOME_WORK3
+#ifdef	INPUT_CHEK_1
 	Fraction A = 2.75;
 	cout << A << endl;
+	Fraction B;
 	cout << "Введите число либо последовательно целую часть, числитель и знаминатель, либо сразу дробь в десятичном виде: ";
-	cin >> A; //Можно ввести в десятичном виде 2.75
-	cout << A << endl;
+	cin >> B; //Можно ввести в десятичном виде 2.75
+	cout << B << endl;
+	B.reduce();
+	B.reduction();
+	cout << B << endl;
+#endif //INPUT_CHEK_1
+#ifdef	INPUT_CHEK_2
+	Fraction A, B, C;
+	cout << "Введите 3 прострые дроби: "; cin >> A >> B >> C;
+	cout << A << "\t" << B << "\t" << C << endl;
+#endif //INPUT_CHEK_2
+	int a = 2;  //No conversion
+	double b = 3; //Conversion  from less to more
+	int c = b; //Conversion from more to less without data loss
+	int d = 5.7; //Conversion from more to less with data loss
+	//int e = "Hello"; //Types not compatible
+	cout << 7 / 2 << endl;
+	cout << 7. / 2 << endl; //Implicit conversion from less to more.
+
+
 }
 ostream& operator<<(ostream& out, const Fraction& obj)
 {
@@ -422,26 +448,50 @@ ostream& operator<<(ostream& out, const Fraction& obj)
 
 istream& operator>>(istream& in, Fraction& obj)
 {
-	double temp_int;
-	double temp_num, temp_den;
-	in >> temp_int;
-	if (int(temp_int) < temp_int) //Простая проверка на тип данных ввели целое число или дробное
+	const int SIZE = 256;
+	char buffer[SIZE] = {};
+	//in >> buffer;
+	in >> buffer;
+	int number[3] = {};
+	int n = 0; // счетчик введенных чисел
+	char delimiters[] = "()/ ";
+	for (char* pch = strtok(buffer, delimiters); pch; pch = strtok(NULL, delimiters))
+	number[n++] = std::atoi(pch);
+	switch (n)
 	{
-		Fraction Temp_A = temp_int;
-		obj.set_integer(Temp_A.get_integer());
-		obj.set_numerator(Temp_A.get_numerator());
-		obj.set_denominator(Temp_A.get_denominator());
-	}
-	else
-	{
-		obj.set_integer(temp_int);
-		in >> temp_num;
-		obj.set_numerator(temp_num);
-		in >> temp_den;
-		obj.set_denominator(temp_den);
-
+	case 1:obj = Fraction(number[0]); break;
+	case 2:obj = Fraction(number[0], number[1]);
+		//obj.set_numerator(number[0]);
+		//obj.set_denominator(number[1]);
+		break;
+	case 3:
+		obj = Fraction(number[0], number[1], number[2]);
+		//obj.set_integer(number[0]);
+		//obj.set_numerator(number[1]);
+		//obj.set_denominator(number[2]);
 	}
 	return in;
+	// atoi - ASCII-string to 'int', принимает строку и возвращает целое число, которое содержится в этой строке
+	//for (int i = 0; i < n; i++) cout << number[i] << "\t"; cout << endl;
+	//double temp_int;
+	//double temp_num, temp_den;
+	//in >> temp_int;
+	//if (int(temp_int) < temp_int) //Простая проверка на тип данных ввели целое число или дробное
+	//{
+	//	Fraction Temp_A = temp_int;
+	//	obj.set_integer(Temp_A.get_integer());
+	//	obj.set_numerator(Temp_A.get_numerator());
+	//	obj.set_denominator(Temp_A.get_denominator());
+	//}
+	//else
+	//{
+	//	obj.set_integer(temp_int);
+	//	in >> temp_num;
+	//	obj.set_numerator(temp_num);
+	//	in >> temp_den;
+	//	obj.set_denominator(temp_den);
+
+	//}
 }
 
 // ----------------- Арифметические операторы вынесем за класс
