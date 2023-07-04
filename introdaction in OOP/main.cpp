@@ -458,7 +458,7 @@ istream& operator>>(istream& in, Fraction& obj)
 	char buffer[SIZE] = {};
 	//in >> buffer;
 	in >> buffer;
-	if (atoi(buffer) < atof(buffer))
+	if (atoi(buffer) < atof(buffer)) //проверка введена ли была десятичная дробь
 		{
 		Fraction Temp_A = atof(buffer);
 		obj.set_integer(Temp_A.get_integer());
