@@ -27,8 +27,8 @@ int& number_simbol_after(double const& number);
 class Fraction
 {
 	int integer;
-	double numerator;
-	double denominator;
+	float numerator;
+	float denominator;
 public:
 	// ---------------------  GET METHODS
 	double get_integer(void) const // Создаем методы get для вывода значений
@@ -171,8 +171,9 @@ public:
 	{
 		//Сделал его Function
 		//------------------------------------------- Сделаю сокращение по Евклиду
+		numerator = round((numerator * 10) / 10);
 		if (this->numerator == 0) return *this;
-		double max = (denominator > 0?denominator:-denominator), min = (numerator > 0 ? numerator:-numerator), temp;
+		float max = (denominator > 0?denominator:-denominator), min = (numerator > 0 ? numerator:-numerator), temp;
 		if (min > max) max = (numerator > 0 ? numerator : -numerator), min = (denominator > 0 ? denominator : -denominator); // беру значение max&min по модулю ибо знак не влияет на итоговый НОД (наибольший общий делитель)
 		while (max != min)
 		{
@@ -193,6 +194,7 @@ public:
 		//int more, less, rest;
 		//if (numerator > denominator) more = numerator, less = denominator;
 		//else more = denominator, less = numerator;
+		numerator = round((numerator * 10) / 10);
 		if (this->numerator == 0) return *this;
 		to_proper();
 		int more = denominator;
@@ -272,8 +274,9 @@ public:
 //#define HOME_WORK
 //#define HOME_WORK2
 //#define HOME_WORK3
-//#define INPUT_CHEK_1
+#define INPUT_CHEK_1
 //#define INPUT_CHEK_2
+//#define INPUT_CHEK_3
 
 void main()
 {
@@ -410,11 +413,11 @@ void main()
 	Fraction A = 2.75;
 	cout << A << endl;
 	Fraction B;
-	cout << "Введите число либо последовательно целую часть, числитель и знаминатель, либо сразу дробь в десятичном виде: ";
-	cin >> B; //Можно ввести в десятичном виде 2.75
+	cout << "Введите дробь в правильном или неправильном виде, либо сразу дробь в десятичном виде: ";
+    cin >> B; //Можно ввести в десятичном виде 2.75
 	cout << B << endl;
 	B.reduce();
-	B.reduction();
+	//B.reduction();
 	cout << B << endl;
 #endif //INPUT_CHEK_1
 #ifdef	INPUT_CHEK_2
@@ -422,13 +425,16 @@ void main()
 	cout << "Введите 3 прострые дроби: "; cin >> A >> B >> C;
 	cout << A << "\t" << B << "\t" << C << endl;
 #endif //INPUT_CHEK_2
+#ifdef INPUT_CHEK_3
 	int a = 2;  //No conversion
 	double b = 3; //Conversion  from less to more
 	int c = b; //Conversion from more to less without data loss
 	int d = 5.7; //Conversion from more to less with data loss
 	//int e = "Hello"; //Types not compatible
 	cout << 7 / 2 << endl;
-	cout << 7. / 2 << endl; //Implicit conversion from less to more.
+	cout << 7. / 2 << endl; //Implicit conversion from less to more.  
+#endif // INPUT_CHEK_3
+
 
 
 }
@@ -452,9 +458,17 @@ istream& operator>>(istream& in, Fraction& obj)
 	char buffer[SIZE] = {};
 	//in >> buffer;
 	in >> buffer;
+	if (atoi(buffer) < atof(buffer))
+		{
+		Fraction Temp_A = atof(buffer);
+		obj.set_integer(Temp_A.get_integer());
+		obj.set_numerator(Temp_A.get_numerator());
+		obj.set_denominator(Temp_A.get_denominator());
+		return in;
+		}
 	int number[3] = {};
 	int n = 0; // счетчик введенных чисел
-	char delimiters[] = "()/ ";
+	char delimiters[] = "()/.";
 	for (char* pch = strtok(buffer, delimiters); pch; pch = strtok(NULL, delimiters))
 	number[n++] = std::atoi(pch);
 	switch (n)
@@ -552,7 +566,7 @@ bool operator <(const Fraction& left, const Fraction& right)
 int& number_simbol_after(double const& number)
 {
 	int count = 0;
-	double temp = number;
+	float temp = number;
 	while (temp != double(int(temp))) temp *= 10, count++;
 	return count;
 }
