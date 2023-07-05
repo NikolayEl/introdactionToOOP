@@ -6,6 +6,8 @@ using namespace std;
 using std::cin;
 using std::cout;
 
+#define delimeter "\n------------------------------------------------------------------------\n"
+
 class Fraction;
 ostream& operator<<(ostream& out, const Fraction& obj);
 istream& operator>>(istream& in, Fraction& obj);
@@ -65,35 +67,44 @@ public:
 		this->denominator = 1;
 		cout << "DefaultConstraction:\t" << this << endl;
 	}
-	Fraction(double const number)
+	Fraction(double number)
 	{
-		this->integer = (int)number;
+		/*this->integer = (int)number; //my code
 		this->numerator = number - integer;
 		this->denominator = 1;
 		for (int i = 0; i < number_simbol_after(number); i++) this->numerator *= 10, this->denominator *= 10;
-		cout << "TypeDoubleConstructor:\t" << this << endl;
+		cout << "TypeFloatConstructor:\t" << this << endl;*/
 		//this->reduce(); Не уверен, что сокращать в конструктуре - это верно!
+		number += 1e-10; //1*10^-10;
+		integer = number;
+		number -= integer;
+		denominator = 1e+9; // 1 * 10^9 точность всегда будет 9 знаков после запятой
+		numerator = number * denominator;
+		reduce();
+		cout << "1ArgDConstructor:\t" << this << endl;
+
+
 	}
-	Fraction(int integer)
+	explicit Fraction(int integer)
 	{
 		this->integer = integer;
 		this->numerator = 0;
 		this->denominator = 1;
-		cout << "ArgConstructor:\t" << this << endl;
+		cout << "OneArgConstructor:\t" << this << endl;
 	}
 	Fraction(double numerator, double denominator)
 	{
 		this->integer = 0;
 		this->numerator = numerator;
 		set_denominator(denominator);
-		cout << "Constructor:\t" << this << endl;
+		cout << "Constructor(two parametrs):\t" << this << endl;
 	}
 	Fraction(int integer, double numerator, double denominator) //знаменатель 1 т.к. на 0 делить нельзя, а если разделить на 1 всегда будет в числителе тоже самое число
 	{
 		this->integer = integer;
 		this->numerator = numerator;
 		set_denominator(denominator);
-		cout << "Constructor:\t" << this << endl;
+		cout << "Constructor(three parametrs):\t" << this << endl;
 	}
 	Fraction(const Fraction& other)
 	{
@@ -104,7 +115,7 @@ public:
 	}
 	~Fraction()
 	{
-		cout << "Distructor:\t" << this << endl;
+		cout << "Destructor:\t" << this << endl;
 	}
 	// ----------------------- Operators
 	//-----------------------------------------------
@@ -165,6 +176,17 @@ public:
 	{
 		return (*this = *this * other.inverted()).to_proper().reduction();
 	}
+	//						   Type-cast operators
+
+	explicit operator int() const
+	{
+		return integer;
+	}	
+	explicit operator double() const
+	{
+		return integer + numerator/denominator;
+	}
+
 	
 	//------------------------ Methods
 	Fraction& reduction() //reduce() - по заданию ОА
@@ -274,9 +296,11 @@ public:
 //#define HOME_WORK
 //#define HOME_WORK2
 //#define HOME_WORK3
-#define INPUT_CHEK_1
+//#define INPUT_CHEK_1
 //#define INPUT_CHEK_2
 //#define INPUT_CHEK_3
+//#define CONVERSION_FROM_OTHER_TO_CLASS
+//#define CONVERSION_FROM_CLASS_TO_OTHER
 
 void main()
 {
@@ -434,8 +458,30 @@ void main()
 	cout << 7 / 2 << endl;
 	cout << 7. / 2 << endl; //Implicit conversion from less to more.  
 #endif // INPUT_CHEK_3
+#ifdef CONVERSION_FROM_OTHER_TO_CLASS
+	Fraction A = (Fraction)5;
+	cout << A << endl;
+	cout << delimeter << endl;
+	Fraction B; //Default Constructor
+	cout << delimeter << endl;
+	B = Fraction(8);
+	cout << delimeter << endl;
+	cout << B << endl;
+#endif // CONVERSION_FROM_OTHER_TO_CLASS
+#ifdef CONVERSION_FROM_CLASS_TO_OTHER
+	Fraction A(2, 1, 2);
+	cout << A << endl;
+	int a = (int)A;
+	cout << a << endl;
 
+	Fraction B(2, 3, 4);
+	cout << B << endl;
+	double b = (double)B;
+	cout << b << endl;
 
+#endif // CONVERSION_FROM_CLASS_TO_OTHER
+	Fraction A = 2.76;
+	cout << A << endl;
 
 }
 ostream& operator<<(ostream& out, const Fraction& obj)
