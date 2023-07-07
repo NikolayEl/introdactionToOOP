@@ -46,6 +46,7 @@ public:
 	String& operator=(const String& other)
 	{
 		this->str = other.get_str();
+		this->size = other.size;
 		cout << "CopyAssignment:\t" << this << endl;
 		return *this;
 	}
