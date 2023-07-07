@@ -2,6 +2,9 @@
 #include <iostream>
 using namespace std;
 
+class String;
+ostream& operator<<(ostream& out, const String& obj);
+String operator+(const String& left, const String& right);
 
 class String
 {
@@ -40,7 +43,9 @@ public:
 	//				Operators
 	String& operator=(const String& other)
 	{
-		this->str = other.str;
+		this->str = other.get_str();
+		cout << "CopyAssignment:\t" << this << endl;
+		return *this;
 	}
 
 	//				Methods
@@ -56,7 +61,7 @@ void main()
 {
 	setlocale(LC_ALL, "");
 
-	cout << sizeof("Hello") << endl;
+	//cout << sizeof("Hello") << endl;
 	String str;
 	str.set_str("Test");
 	cout << str.get_str() << endl;
@@ -64,5 +69,25 @@ void main()
 	String str2 = 5;
 	str2.print();
 	String str3 = "Hello";
-	str.print();
+	cout << str3 << endl;
+	String str4 = "World";
+	cout << str4 << endl;
+	String str5 = str3 + str4;
+	cout << str3 + str4 << endl;
+	str5.print();
+	cout << str5 << endl;
+}
+
+ostream& operator<<(ostream& out, const String& obj)
+{
+	return out << obj.get_str();
+}
+
+String operator+(const String& left, const String& right)
+{
+	string left_str = left.get_str();
+	string right_str = right.get_str();
+	string temp = (left_str + right_str);
+	const char* temp_char = temp.c_str();
+	return String(temp_char);
 }
