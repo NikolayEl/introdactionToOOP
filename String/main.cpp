@@ -20,6 +20,7 @@ public:
 	void set_str(const char* str)
 	{
 		this->str = (char*)str;
+		this->size = sizeof(str);
 	}
 	//				Constructors
 	String(int size = 80)
@@ -32,6 +33,7 @@ public:
 	String (const char* str)
 	{
 		this->str = (char*)str;
+		this->size = sizeof(str);
 		cout << "1ArgDConstructor:\t" << this << endl;
 	}
 
