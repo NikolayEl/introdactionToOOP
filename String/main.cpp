@@ -37,6 +37,11 @@ public:
 		//if(str)delete[] str;
 		cout << "Destructor:\t" << this << endl;
 	}
+	//				Operators
+	String& operator=(const String& other)
+	{
+		this->str = other.str;
+	}
 
 	//				Methods
 	void print() const
