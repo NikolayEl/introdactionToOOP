@@ -1,4 +1,4 @@
-#define _CRT_SECURE_NO_WARNINGS
+п»ї#define _CRT_SECURE_NO_WARNINGS
 #include <iostream>
 using namespace std;
 
@@ -11,8 +11,8 @@ String operator+(const String& left, const String& right);
 
 class String
 {
-	int size; //Размер строки в байтах
-	char* str; //Адрес строки в динамической памяти
+	int size; //Р Р°Р·РјРµСЂ СЃС‚СЂРѕРєРё РІ Р±Р°Р№С‚Р°С…
+	char* str; //РђРґСЂРµСЃ СЃС‚СЂРѕРєРё РІ РґРёРЅР°РјРёС‡РµСЃРєРѕР№ РїР°РјСЏС‚Рё
 public:
 	//				Get method
 	const char* get_str(void) const
@@ -30,7 +30,7 @@ public:
 	//				Set method
 	/*void set_str(const char* str)
 	{
-		this->str = (char*)str;	//Низя так делать!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
+		this->str = (char*)str;	//РќРёР·СЏ С‚Р°Рє РґРµР»Р°С‚СЊ!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
 		this->size = sizeof(str);
 	}*/
 	//				Constructors
@@ -48,9 +48,14 @@ public:
 		for (int i = 0; i < size; i++) this->str[i] = other.str[i];
 		cout << "CopyConstructor:\t" << this << endl;
 	}
-	String(const String&& moved)
-	{	// не делаю проверку if (this == &moved) return *this потому что это не копирование, а перенос
-		*this = moved; //До сих пор не уверен, что правильно написал! Ибо ничего не могу сделать с moved.str, например занулить и тд ибо const char*
+	String(String&& moved)
+	{	
+		//this->str = nullptr;
+		//this->size = 0;
+		this->str = moved.str;
+		this->size = moved.size;
+		moved.str = nullptr;
+		moved.size = 0;
 		cout << "MoveConstructor:\t" << this << endl;
 	}
 
@@ -79,9 +84,14 @@ public:
 		cout << "CopyAssignment:\t" << this << endl;
 		return *this;
 	}
-	String& operator=(const String&& other)
+	String& operator=(String&& other)
 	{
-		*this = other; //До сих пор не уверен, что правильно написал! Ибо ничего не могу сделать с other.str, например занулить и тд ибо const char*
+		//this->str = nullptr;
+		//this->size = 0;
+		this->str = other.str;
+		this->size = other.size;
+		other.str = nullptr;
+		other.size = 0;
 		cout << "MoveAssignment:\t" << this << endl;
 		return *this;
 	}
