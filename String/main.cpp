@@ -48,6 +48,11 @@ public:
 		for (int i = 0; i < size; i++) this->str[i] = other.str[i];
 		cout << "CopyConstructor:\t" << this << endl;
 	}
+	String(const String&& moved)
+	{
+		*this = moved; //До сих пор не уверен, что правильно написал! Ибо ничего не могу сделать с moved.str, например занулить и тд ибо const char*
+		cout << "MoveConstructor:\t" << this << endl;
+	}
 
 	String (const char* str)
 	{
@@ -74,6 +79,13 @@ public:
 		cout << "CopyAssignment:\t" << this << endl;
 		return *this;
 	}
+	String& operator=(const String&& other)
+	{
+		*this = other; //До сих пор не уверен, что правильно написал! Ибо ничего не могу сделать с other.str, например занулить и тд ибо const char*
+		cout << "MoveAssignment:\t" << this << endl;
+		return *this;
+	}
+
 	char operator[](int i) const
 	{
 		return str[i];
