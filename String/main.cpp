@@ -49,7 +49,7 @@ public:
 		cout << "CopyConstructor:\t" << this << endl;
 	}
 	String(const String&& moved)
-	{
+	{	// не делаю проверку if (this == &moved) return *this потому что это не копирование, а перенос
 		*this = moved; //До сих пор не уверен, что правильно написал! Ибо ничего не могу сделать с moved.str, например занулить и тд ибо const char*
 		cout << "MoveConstructor:\t" << this << endl;
 	}
