@@ -48,14 +48,14 @@ public:
 		for (int i = 0; i < size; i++) this->str[i] = other.str[i];
 		cout << "CopyConstructor:\t" << this << endl;
 	}
-	String(String&& moved)
+	String(String&& other)
 	{	
 		//this->str = nullptr;
 		//this->size = 0;
-		this->str = moved.str;
-		this->size = moved.size;
-		moved.str = nullptr;
-		moved.size = 0;
+		this->str = other.str;
+		this->size = other.size;
+		other.str = nullptr;
+		other.size = 0;
 		cout << "MoveConstructor:\t" << this << endl;
 	}
 
@@ -86,8 +86,8 @@ public:
 	}
 	String& operator=(String&& other)
 	{
-		//this->str = nullptr;
-		//this->size = 0;
+		if (this == &other) return *this;
+		delete[] this->str;
 		this->str = other.str;
 		this->size = other.size;
 		other.str = nullptr;
