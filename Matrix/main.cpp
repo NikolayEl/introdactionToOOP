@@ -12,6 +12,12 @@ istream& operator>>(istream& in, Matrix& obj);
 Matrix operator+(const Matrix& left, const Matrix& right);
 Matrix operator-(const Matrix& left, const Matrix& right);
 Matrix operator*(const Matrix& left, const Matrix& right);
+Matrix operator/(const Matrix& left, const Matrix& right);
+int matrix_determenant(const Matrix& other);
+Matrix minor_matrix(const Matrix& other);
+Matrix matrix_of_algebraic_additions(const Matrix& other);
+Matrix& copy_matrix(Matrix& left, const Matrix& right);
+Matrix transpose_matrix(const Matrix& other);
 
 
 class Matrix
@@ -139,7 +145,7 @@ public:
 			}
 		}
 	}
-
+	
 };
 
 void main()
@@ -167,8 +173,39 @@ void main()
 	cout << matrix4 << endl;
 	cout << delimetr;
 	Matrix matrix5 = matrix1 * matrix2;
+	cout << endl << "matrx 1 * matrix2 = " << endl;
 	cout << matrix5 << endl;
-
+	cout << delimetr;
+	cout << "Determenant matrix1: " << matrix_determenant(matrix1) << endl;
+	cout << "Determenant matrix2: " << matrix_determenant(matrix2) << endl;
+	cout << delimetr;
+	cout << "Minor matrix1:" << endl;
+	cout << minor_matrix(matrix1) << endl;
+	cout << "Minor matrix2:" << endl;
+	cout << minor_matrix(matrix2) << endl;
+	cout << delimetr;
+	cout << "Матрица алгебраических дополнений matrix1:" << endl;
+	cout << matrix_of_algebraic_additions(minor_matrix(matrix1)) << endl;
+	cout << "Матрица алгебраических дополнений matrix2:" << endl;
+	cout << matrix_of_algebraic_additions(minor_matrix(matrix2)) << endl;
+	cout << delimetr;
+	cout << "Transpose matrix1:" << endl;
+	Matrix transposeMatrix1 = transpose_matrix(matrix_of_algebraic_additions(minor_matrix(matrix1)));
+	cout << transposeMatrix1 << endl;
+	Matrix transposeMatrix2 = transpose_matrix(matrix_of_algebraic_additions(minor_matrix(matrix2)));
+	cout << transposeMatrix2 << endl;
+	cout << delimetr;
+	cout << "Итак внимание - обратная матрица!" << endl;
+	cout << "Обратная матрица matrix1, сперва множитель: " << -1 << "/" << matrix_determenant(matrix1) * (-1) << endl;
+	cout << "Сама матрица:" << endl;
+	cout << transposeMatrix1 << endl;
+	cout << "Обратная матрица matrix2, сперва множитель: " << -1 << "/" << matrix_determenant(matrix2) * (-1) << endl;
+	cout << "Сама матрица:" << endl;
+	cout << transposeMatrix2 << endl;
+	cout << delimetr;
+	cout << "matrix1 / matrix2:" << endl << endl;
+	cout << "сперва множитель: " << -1 << "/" << matrix_determenant(matrix2) * (-1) << endl;
+	cout << matrix1 / matrix2 << endl;
 }
 
 ostream& operator<<(ostream& out, const Matrix& obj)
@@ -232,11 +269,11 @@ Matrix operator*(const Matrix& left, const Matrix& right)
 {
 	if (left.get_cols() != right.get_rows()) cout << "Найти произведение невозможно" << endl;
 	if (left.get_cols() != right.get_rows()) return Matrix();
-	Matrix buffer(left.get_rows(), (left.get_cols() >= right.get_cols() ? right.get_cols() : left.get_cols()));
+	Matrix buffer(left.get_rows(), right.get_cols());
 	int temp = 0;
 	for (int i = 0; i < left.get_rows(); i++)
 	{
-		for (int j = 0; j < (left.get_cols() >= right.get_cols() ? right.get_cols() : left.get_cols()); j++)
+		for (int j = 0; j < right.get_cols(); j++)
 		{
 			for (int k = 0; k < left.get_cols(); k++)
 			{
@@ -247,4 +284,139 @@ Matrix operator*(const Matrix& left, const Matrix& right)
 		}
 	}
 	return buffer;
+}
+
+int matrix_determenant(const Matrix& other)
+{
+	if (other.get_cols() != other.get_rows()) return 0;
+	if (other.get_cols() == 2)
+	{
+		int temp = other.get_array(0, 0) * other.get_array(1, 1) - other.get_array(0, 1) * other.get_array(1, 0);
+		//if (temp == 0) cout << "Определитель равен 0, обратной матрицы не найти" << endl;
+		return temp;
+	}
+	else if (other.get_cols() == 3)
+	{
+		int temp1 = other.get_array(0, 0) * other.get_array(1, 1) * other.get_array(2, 2);
+		int temp2 = other.get_array(0, 2) * other.get_array(0, 1) * other.get_array(1, 2);
+		int temp3 = other.get_array(1, 0) * other.get_array(2, 1) * other.get_array(0, 2);
+		int temp4 = other.get_array(2, 0) * other.get_array(1, 1) * other.get_array(0, 2);
+		int temp5 = other.get_array(0, 0) * other.get_array(2, 1) * other.get_array(1, 2);
+		int temp6 = other.get_array(1, 0) * other.get_array(0, 1) * other.get_array(2, 2);
+		return temp1 + temp2 + temp3 - temp4 - temp5 - temp6;
+	}
+	else
+	{
+		cout << "Не обучена считать больше 3 разрядов" << endl;
+		return 0;
+	}
+}
+
+Matrix minor_matrix(const Matrix& other)
+{
+	if (other.get_cols() != other.get_rows()) return 0;
+	if (other.get_cols() == 2)
+	{
+		Matrix buffer(2, 2);
+		buffer.set_array(0, 0, other.get_array(1, 1));
+		buffer.set_array(0, 1, other.get_array(1, 0));
+		buffer.set_array(1, 0, other.get_array(0, 1));
+		buffer.set_array(1, 1, other.get_array(0, 0));
+		return buffer;
+	}
+	else if (other.get_cols() == 3 || other.get_cols() == 4)
+	{
+		Matrix buffer(other.get_cols(), other.get_cols());
+		Matrix temp(other.get_cols() - 1, other.get_cols() - 1);
+		for (int i = 0; i < other.get_cols(); i++)
+		{
+			for (int j = 0; j < other.get_cols(); j++)
+			{
+				
+				for (int k = 0; k < other.get_cols(); k++)
+				{
+					int k1 = 0, l1 = 0;
+					for (int l = 0; l < other.get_cols(); l ++)
+					{
+						if (k == i || l == j) continue;
+						temp.set_array(k1, l1, other.get_array(k, l));
+						k1++;
+						l1++;
+					}
+				}
+				buffer.set_array(i, j, matrix_determenant(temp));
+			}
+		}
+		return buffer;
+	}
+	else
+	{
+		cout << "Не обучена считать больше 4 разрядов" << endl;
+		return 0;
+	}
+
+}
+Matrix matrix_of_algebraic_additions(const Matrix& other)
+{
+	if (other.get_cols() != other.get_rows()) return 0;
+	Matrix buffer(other.get_rows(), other.get_cols());
+	buffer.set_rows(other.get_rows());
+	buffer.set_cols(other.get_cols());
+	copy_matrix(buffer, other);
+	if (buffer.get_cols() == 3)
+	{
+		buffer.set_array(0, 1, buffer.get_array(0, 1) * (-1));
+		buffer.set_array(1, 0, buffer.get_array(1, 0) * (-1));
+		buffer.set_array(1, 2, buffer.get_array(1, 2) * (-1));
+		buffer.set_array(2, 1, buffer.get_array(2, 1) * (-1));
+		return buffer;
+	}
+	else if (buffer.get_cols() == 2)
+	{
+		buffer.set_array(0, 1, buffer.get_array(0, 1) * (-1));
+		buffer.set_array(1, 0, buffer.get_array(1, 0) * (-1));
+		return buffer;
+	}
+	else
+	{
+		cout << "Не обучена считать больше 3 разрядов" << endl;
+		return 0;
+	}
+}
+Matrix& copy_matrix(Matrix& left, const Matrix& right)
+{
+	for (int i = 0; i < right.get_rows(); i++)
+	{
+		for (int j = 0; j < right.get_cols(); j++)
+		{
+			left.set_array(i, j, right.get_array(i, j));
+		}
+	}
+	return left;
+}
+
+Matrix transpose_matrix(const Matrix& other)
+{
+	if (other.get_cols() != other.get_rows()) return 0;
+	Matrix buffer(other.get_rows(), other.get_cols());
+	buffer.set_rows(other.get_rows());
+	buffer.set_cols(other.get_cols());
+	for (int i = 0; i < buffer.get_rows(); i++)
+	{
+		for (int j = 0; j < buffer.get_cols(); j++)
+		{
+			buffer.set_array(j, i, other.get_array(i, j));
+		}
+	}
+	return buffer;
+}
+
+Matrix operator/(const Matrix& left, const Matrix& right)
+{
+	int matrixDetermenant = matrix_determenant(right);
+	Matrix buffer(right.get_rows(), right.get_cols());
+	buffer.set_rows(right.get_rows());
+	buffer.set_cols(right.get_cols());
+	buffer = transpose_matrix(matrix_of_algebraic_additions(minor_matrix(right)));
+	return left * buffer;
 }
