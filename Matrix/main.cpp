@@ -126,6 +126,7 @@ public:
 	//{
 	//	return array[i][j];
 	//}
+	
 	//			Method's
 	void print() const
 	{
