@@ -248,6 +248,8 @@ Matrix operator+(const Matrix& left, const Matrix& right)
 	if (left.get_cols() != right.get_cols() || left.get_rows() != right.get_rows()) cout << "Разная размерность - матрицы не складываются" << endl; 
 	if (left.get_cols() != right.get_cols() || left.get_rows() != right.get_rows()) return Matrix();
 	Matrix buffer(left.get_rows(), left.get_cols());
+	buffer.set_rows(left.get_rows());
+	buffer.set_cols(left.get_cols());
 	for (int i = 0; i < buffer.get_rows(); i++)
 	{
 		for (int j = 0; j < buffer.get_cols(); j++) buffer.set_array(i, j, (left.get_array(i, j) + right.get_array(i, j)));
@@ -259,6 +261,8 @@ Matrix operator-(const Matrix& left, const Matrix& right)
 	if (left.get_cols() != right.get_cols() || left.get_rows() != right.get_rows()) cout << "Разная размерность - матрицы не вычитаются" << endl;
 	if (left.get_cols() != right.get_cols() || left.get_rows() != right.get_rows()) return Matrix();
 	Matrix buffer(left.get_rows(), left.get_cols());
+	buffer.set_rows(left.get_rows());
+	buffer.set_cols(left.get_cols());
 	for (int i = 0; i < buffer.get_rows(); i++)
 	{
 		for (int j = 0; j < buffer.get_cols(); j++) buffer.set_array(i, j, (left.get_array(i, j) - right.get_array(i, j)));
@@ -270,6 +274,8 @@ Matrix operator*(const Matrix& left, const Matrix& right)
 	if (left.get_cols() != right.get_rows()) cout << "Найти произведение невозможно" << endl;
 	if (left.get_cols() != right.get_rows()) return Matrix();
 	Matrix buffer(left.get_rows(), right.get_cols());
+	buffer.set_rows(left.get_rows());
+	buffer.set_cols(right.get_cols());
 	int temp = 0;
 	for (int i = 0; i < left.get_rows(); i++)
 	{
@@ -318,6 +324,8 @@ Matrix minor_matrix(const Matrix& other)
 	if (other.get_cols() == 2)
 	{
 		Matrix buffer(2, 2);
+		buffer.set_rows(2);
+		buffer.set_cols(2);
 		buffer.set_array(0, 0, other.get_array(1, 1));
 		buffer.set_array(0, 1, other.get_array(1, 0));
 		buffer.set_array(1, 0, other.get_array(0, 1));
@@ -327,7 +335,11 @@ Matrix minor_matrix(const Matrix& other)
 	else if (other.get_cols() == 3 || other.get_cols() == 4)
 	{
 		Matrix buffer(other.get_cols(), other.get_cols());
+		buffer.set_rows(other.get_rows());
+		buffer.set_cols(other.get_cols());
 		Matrix temp(other.get_cols() - 1, other.get_cols() - 1);
+		temp.set_rows(other.get_rows() - 1);
+		temp.set_cols(other.get_cols() - 1);
 		for (int i = 0; i < other.get_cols(); i++)
 		{
 			for (int j = 0; j < other.get_cols(); j++)
