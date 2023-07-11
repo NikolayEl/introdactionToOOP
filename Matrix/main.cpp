@@ -4,11 +4,14 @@
 #include <cstdlib>
 
 using namespace std;
+#define delimetr "\n----------------------------------------------------------\n"
 
 class Matrix;
 ostream& operator<<(ostream& out, const Matrix& obj);
 istream& operator>>(istream& in, Matrix& obj);
 Matrix operator+(const Matrix& left, const Matrix& right);
+Matrix operator-(const Matrix& left, const Matrix& right);
+Matrix operator*(const Matrix& left, const Matrix& right);
 
 
 class Matrix
@@ -148,17 +151,24 @@ void main()
 	cout << "Введите цифры в массив " << rows << " на " << cols << ", в кол-ве: " << rows * cols << ", разделяя ',' ';' ':'";*/
 	//Matrix matrix1(rows, cols);
 	//cin >> matrix1;
-	Matrix matrix1(4, 4);
-	Matrix matrix2(3, 4);
+	Matrix matrix1(3, 3);
+	Matrix matrix2(3, 3);
 	matrix1.random_array();
 	matrix2.random_array();
 	cout << matrix1 << endl;
 	cout << matrix2 << endl;
-
+	cout << delimetr;
 	Matrix matrix3;
 	matrix3 = matrix1 + matrix2;
 	cout << endl << "matrx 1 + matrix2 = " << endl;
 	cout << matrix3 << endl;
+	cout << delimetr;
+	Matrix matrix4 = matrix1 - matrix2;
+	cout << matrix4 << endl;
+	cout << delimetr;
+	Matrix matrix5 = matrix1 * matrix2;
+	cout << matrix5 << endl;
+
 }
 
 ostream& operator<<(ostream& out, const Matrix& obj)
@@ -204,6 +214,37 @@ Matrix operator+(const Matrix& left, const Matrix& right)
 	for (int i = 0; i < buffer.get_rows(); i++)
 	{
 		for (int j = 0; j < buffer.get_cols(); j++) buffer.set_array(i, j, (left.get_array(i, j) + right.get_array(i, j)));
+	}
+	return buffer;
+}
+Matrix operator-(const Matrix& left, const Matrix& right)
+{
+	if (left.get_cols() != right.get_cols() || left.get_rows() != right.get_rows()) cout << "Разная размерность - матрицы не вычитаются" << endl;
+	if (left.get_cols() != right.get_cols() || left.get_rows() != right.get_rows()) return Matrix();
+	Matrix buffer(left.get_rows(), left.get_cols());
+	for (int i = 0; i < buffer.get_rows(); i++)
+	{
+		for (int j = 0; j < buffer.get_cols(); j++) buffer.set_array(i, j, (left.get_array(i, j) - right.get_array(i, j)));
+	}
+	return buffer;
+}
+Matrix operator*(const Matrix& left, const Matrix& right)
+{
+	if (left.get_cols() != right.get_rows()) cout << "Найти произведение невозможно" << endl;
+	if (left.get_cols() != right.get_rows()) return Matrix();
+	Matrix buffer(left.get_rows(), (left.get_cols() >= right.get_cols() ? right.get_cols() : left.get_cols()));
+	int temp = 0;
+	for (int i = 0; i < left.get_rows(); i++)
+	{
+		for (int j = 0; j < (left.get_cols() >= right.get_cols() ? right.get_cols() : left.get_cols()); j++)
+		{
+			for (int k = 0; k < left.get_cols(); k++)
+			{
+				temp += left.get_array(i, k) * right.get_array(k, j);
+			}
+			buffer.set_array(i, j, temp);
+			temp = 0;
+		}
 	}
 	return buffer;
 }
