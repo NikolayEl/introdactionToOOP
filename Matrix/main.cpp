@@ -63,7 +63,7 @@ public:
 	//			Destructor
 	~Matrix()
 	{
-		for (int i = 0; i < rows; i++) delete array[i];
+		for (int i = 0; i < rows; i++) delete[] array[i];
 		delete[] array;
 		cout << "Destructor:\t" << this << endl;
 	}
@@ -76,9 +76,24 @@ public:
 		this->cols = other.cols;
 		this->array = new int* [rows] {};
 		for (int i = 0; i < rows; i++) array[i] = new int [cols] {};
-		cout << "CopyConstructor:\t" << this << endl;
+		cout << "CopyAssignment:\t" << this << endl;
 		return *this;
 	}
+	Matrix& operator=(Matrix&& other)
+	{
+		if (this == &other) return *this;
+		for (int i = 0; i < rows; i++) delete[] array[i];
+		delete[] array;
+		this->rows = other.rows;
+		this->cols = other.cols;
+		this->array = other.array;
+		other.rows = 0;
+		other.cols = 0;
+		other.array = nullptr;
+		cout << "MoveAssignment:\t" << this << endl;
+		return *this;
+	}
+
 
 };
 
