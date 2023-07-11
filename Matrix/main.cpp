@@ -8,6 +8,7 @@ using namespace std;
 class Matrix;
 ostream& operator<<(ostream& out, const Matrix& obj);
 istream& operator>>(istream& in, Matrix& obj);
+Matrix operator+(const Matrix& left, const Matrix& right);
 
 
 class Matrix
@@ -142,13 +143,22 @@ void main()
 {
 	setlocale(LC_ALL, "");
 	int rows, cols;
-	cout << "Enter rows: "; cin >> rows;
+	/*cout << "Enter rows: "; cin >> rows;
 	cout << "Enter cols: "; cin >> cols;
-	cout << "Введите цифры в массив " << rows << " на " << cols << ", в кол-ве: " << rows * cols << ", разделяя ',' ';' ':'";
-	Matrix matrix1(rows, cols);
-	cin >> matrix1;
-	//matrix1.random_array();
+	cout << "Введите цифры в массив " << rows << " на " << cols << ", в кол-ве: " << rows * cols << ", разделяя ',' ';' ':'";*/
+	//Matrix matrix1(rows, cols);
+	//cin >> matrix1;
+	Matrix matrix1(4, 4);
+	Matrix matrix2(3, 4);
+	matrix1.random_array();
+	matrix2.random_array();
 	cout << matrix1 << endl;
+	cout << matrix2 << endl;
+
+	Matrix matrix3;
+	matrix3 = matrix1 + matrix2;
+	cout << endl << "matrx 1 + matrix2 = " << endl;
+	cout << matrix3 << endl;
 }
 
 ostream& operator<<(ostream& out, const Matrix& obj)
@@ -184,4 +194,16 @@ istream& operator>>(istream& in, Matrix& obj) //Если ввели не все 
 		}
 	}
 	return in;
+}
+
+Matrix operator+(const Matrix& left, const Matrix& right)
+{
+	if (left.get_cols() != right.get_cols() || left.get_rows() != right.get_rows()) cout << "Разная размерность - матрицы не складываются" << endl; 
+	if (left.get_cols() != right.get_cols() || left.get_rows() != right.get_rows()) return Matrix();
+	Matrix buffer(left.get_rows(), left.get_cols());
+	for (int i = 0; i < buffer.get_rows(); i++)
+	{
+		for (int j = 0; j < buffer.get_cols(); j++) buffer.set_array(i, j, (left.get_array(i, j) + right.get_array(i, j)));
+	}
+	return buffer;
 }
