@@ -71,6 +71,7 @@ public:
 	//			Operators
 	Matrix& operator=(const Matrix& other)
 	{
+		if (this == &other) return *this;
 		this->rows = other.rows;
 		this->cols = other.cols;
 		this->array = new int* [rows] {};
