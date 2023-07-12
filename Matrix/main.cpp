@@ -12,6 +12,7 @@ istream& operator>>(istream& in, Matrix& obj);
 Matrix operator+(const Matrix& left, const Matrix& right);
 Matrix operator-(const Matrix& left, const Matrix& right);
 Matrix operator*(const Matrix& left, const Matrix& right);
+Matrix operator*(const Matrix& left, const double &number);
 Matrix operator/(const Matrix& left, const Matrix& right);
 int matrix_determenant(const Matrix& other);
 Matrix minor_matrix(const Matrix& other);
@@ -207,6 +208,12 @@ void main()
 	cout << "matrix1 / matrix2:" << endl << endl;
 	cout << "сперва множитель: " << -1 << "/" << matrix_determenant(matrix2) * (-1) << endl;
 	cout << matrix1 / matrix2 << endl;
+	cout << delimetr;
+	cout << "Умножаем матрицу1 на число:" << endl;
+	cout << "matrix1 * 4:" << endl << matrix1 * 4 << endl;
+	cout << "Умножаем матрицу2 на число:" << endl;
+	cout << "matrix2 * 3:" << endl << matrix2 * 3 << endl;
+
 }
 
 ostream& operator<<(ostream& out, const Matrix& obj)
@@ -288,6 +295,20 @@ Matrix operator*(const Matrix& left, const Matrix& right)
 			}
 			buffer.set_array(i, j, temp);
 			temp = 0;
+		}
+	}
+	return buffer;
+}
+Matrix operator*(const Matrix& left, const double& number)
+{
+	Matrix buffer(left.get_rows(), left.get_cols());
+	buffer.set_rows(left.get_rows());
+	buffer.set_cols(left.get_cols());
+	for (int i = 0; i < buffer.get_rows(); i++)
+	{
+		for (int j = 0; j < buffer.get_cols(); j++)
+		{
+			buffer.set_array(i, j, left.get_array(i, j) * number);
 		}
 	}
 	return buffer;
