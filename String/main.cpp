@@ -27,46 +27,32 @@ public:
 	{
 		return size;
 	}
-	//				Set method
-	/*void set_str(const char* str)
-	{
-		this->str = (char*)str;	//Низя так делать!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
-		this->size = sizeof(str);
-	}*/
+
 	//				Constructors
 	explicit String(int size = 80):size(size), str(new char[size]{})
 	{
-		//this->size = size;
-		//this->str = new char[size] {};
+
 		cout << "DefConstructor:\t" << this << endl;
 	}
-	String(const String& other):size(other.size), str(new char[size] {})
+	String (const char* str):String(strlen(str) + 1)
+	{
+
+		for (int i = 0; str[i]; i++) this->str[i] = str[i];
+		cout << "Constructor:\t" << this << endl;
+	}
+	String(const String& other):String(other.str)
 	{
 		//Depp Copy
-		//this->size = other.size;
-		//this->str = new char[size] {};
-		for (int i = 0; i < size; i++) this->str[i] = other.str[i];
+
 		cout << "CopyConstructor:\t" << this << endl;
 	}
 	String(String&& other):size(other.size), str(other.str)
 	{	
-		//this->str = nullptr;
-		//this->size = 0;
-		//this->str = other.str;
-		//this->size = other.size;
+
 		other.str = nullptr;
 		other.size = 0;
 		cout << "MoveConstructor:\t" << this << endl;
 	}
-
-	String (const char* str):size(strlen(str) + 1), str(new char[size] {})
-	{
-		//this->size = strlen(str) + 1;
-		//this->str = new char[size] {};
-		for (int i = 0; str[i]; i++) this->str[i] = str[i];
-		cout << "Constructor:\t" << this << endl;
-	}
-
 	~String()
 	{
 		delete[] str;
