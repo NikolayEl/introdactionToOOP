@@ -40,29 +40,29 @@ public:
 		//this->str = new char[size] {};
 		cout << "DefConstructor:\t" << this << endl;
 	}
-	String(const String& other)
+	String(const String& other):size(other.size), str(new char[size] {})
 	{
 		//Depp Copy
-		this->size = other.size;
-		this->str = new char[size] {};
+		//this->size = other.size;
+		//this->str = new char[size] {};
 		for (int i = 0; i < size; i++) this->str[i] = other.str[i];
 		cout << "CopyConstructor:\t" << this << endl;
 	}
-	String(String&& other)
+	String(String&& other):size(other.size), str(other.str)
 	{	
 		//this->str = nullptr;
 		//this->size = 0;
-		this->str = other.str;
-		this->size = other.size;
+		//this->str = other.str;
+		//this->size = other.size;
 		other.str = nullptr;
 		other.size = 0;
 		cout << "MoveConstructor:\t" << this << endl;
 	}
 
-	String (const char* str)
+	String (const char* str):size(strlen(str) + 1), str(new char[size] {})
 	{
-		this->size = strlen(str) + 1;
-		this->str = new char[size] {};
+		//this->size = strlen(str) + 1;
+		//this->str = new char[size] {};
 		for (int i = 0; str[i]; i++) this->str[i] = str[i];
 		cout << "Constructor:\t" << this << endl;
 	}
@@ -136,8 +136,10 @@ void main()
 	String str5 = str3 + str4;
 	cout << str5 << endl;
 	String str6;
+	String str7 = str6;
 	str6 = str3 + str4;
 	cout << str6 << endl;
+
 #endif // BASE_CHEK
 
 #ifdef CAlLING_CONSTRUCTORS
