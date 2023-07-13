@@ -70,8 +70,7 @@ public:
 	//			Destructor
 	~Matrix()
 	{
-		if(array)for (int i = 0; i < rows; i++) delete[] array[i];
-		
+		for (int i = 0; i < rows; i++) delete[] array[i];
 		delete[] array;
 		cout << "Destructor:\t" << this << endl;
 	}
