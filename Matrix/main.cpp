@@ -40,50 +40,28 @@ public:
 	{
 		return this->array[i][j];
 	}
-	//			SET Method's
-	void set_rows(int rows)
-	{
-		this->rows = rows;
-	}
-	void set_cols(int cols)
-	{
-		this->cols = cols;
-	}
-	void set_array(int i, int j, int number)
-	{
-		this->array[i][j] = number;
-	}
-
 	//			Constructor's
-	Matrix()
+	Matrix():Matrix(1, 1)
 	{
-		this->rows = 1;
-		this->cols = 1;
-		this->array = new int* [rows] {};
 		for (int i = 0; i < rows; i++) array[i] = new int[cols] {};
 		cout << "DefConstructor:\t" << this << endl;
 	}
-	Matrix(int cols)
+	Matrix(int cols): Matrix(1, cols)
 	{
-		this->rows = 1;
-		this->cols = cols;
-		this->array = new int*[rows] {};
 		for (int i = 0; i < rows; i++) array[i] = new int[cols] {};
 		cout << "1ArgConstructor:\t" << this << endl;
 	}
-	Matrix(int rows, int cols)
+	Matrix(int rows, int cols):rows(rows), cols(cols), array(new int*[rows] {})
 	{
-		this->rows = rows;
-		this->cols = cols;
-		this->array = new int*[rows] {};
 		for (int i = 0; i < rows; i++) array[i] = new int[cols] {};
 		cout << "2ArgConstructor:\t" << this << endl;
 	}
-	Matrix(Matrix&& other)
+	Matrix(const Matrix& other)
 	{
-		this->rows = other.rows;
-		this->cols = other.cols;
-		this->array = other.array;
+
+	}
+	Matrix(Matrix&& other): rows(other.rows), cols(other.cols), array(other.array)
+	{
 		other.rows = 0;
 		other.cols = 0;
 		other.array = nullptr;
@@ -101,13 +79,9 @@ public:
 	//			Operators
 	Matrix& operator=(const Matrix& other)
 	{
-		int a = 2;
-		int b = 3;
-		a = b;
 		if (this == &other) return *this;
 		for (int i = 0; i < rows; i++) delete[] array[i];
 		delete[] array;
-
 		this->rows = other.rows;
 		this->cols = other.cols;
 		this->array = new int* [rows] {};
@@ -169,6 +143,9 @@ void main()
 	cout << "Введите цифры в массив " << rows << " на " << cols << ", в кол-ве: " << rows * cols << ", разделяя ',' ';' ':'";*/
 	//Matrix matrix1(rows, cols);
 	//cin >> matrix1;
+	Matrix matrix11(4);
+	matrix11.random_array();
+	cout << matrix11 << endl;
 	Matrix matrix1(3, 3);
 	Matrix matrix2(3, 3);
 	matrix1.random_array();
@@ -255,7 +232,7 @@ istream& operator>>(istream& in, Matrix& obj) //Если ввели не все 
 		for (j = 0; j < obj.get_cols(); j++)
 		{
 			if (i * j >= n) break;
-			obj.set_array(i, j, number[(i * obj.get_cols()) + j]);
+			obj[i][j] = number[(i * obj.get_cols()) + j];
 		}
 	}
 	return in;
@@ -266,11 +243,9 @@ Matrix operator+(const Matrix& left, const Matrix& right)
 	if (left.get_cols() != right.get_cols() || left.get_rows() != right.get_rows()) cout << "Разная размерность - матрицы не складываются" << endl; 
 	if (left.get_cols() != right.get_cols() || left.get_rows() != right.get_rows()) return Matrix();
 	Matrix buffer(left.get_rows(), left.get_cols());
-	buffer.set_rows(left.get_rows());
-	buffer.set_cols(left.get_cols());
 	for (int i = 0; i < buffer.get_rows(); i++)
 	{
-		for (int j = 0; j < buffer.get_cols(); j++) buffer.set_array(i, j, (left.get_element(i, j) + right.get_element(i, j)));
+		for (int j = 0; j < buffer.get_cols(); j++) buffer[i][j] = (left.get_element(i, j) + right.get_element(i, j));
 	}
 	return buffer;
 }
@@ -279,11 +254,9 @@ Matrix operator-(const Matrix& left, const Matrix& right)
 	if (left.get_cols() != right.get_cols() || left.get_rows() != right.get_rows()) cout << "Разная размерность - матрицы не вычитаются" << endl;
 	if (left.get_cols() != right.get_cols() || left.get_rows() != right.get_rows()) return Matrix();
 	Matrix buffer(left.get_rows(), left.get_cols());
-	buffer.set_rows(left.get_rows());
-	buffer.set_cols(left.get_cols());
 	for (int i = 0; i < buffer.get_rows(); i++)
 	{
-		for (int j = 0; j < buffer.get_cols(); j++) buffer.set_array(i, j, (left.get_element(i, j) - right.get_element(i, j)));
+		for (int j = 0; j < buffer.get_cols(); j++) buffer[i][j] = (left.get_element(i, j) - right.get_element(i, j));
 	}
 	return buffer;
 }
@@ -300,10 +273,7 @@ Matrix operator*(const Matrix& left, const Matrix& right)
 			for (int k = 0; k < left.get_cols(); k++)
 			{
 				buffer[i][j] += left[i][k] * right[k][j];
-				//buffer[i][j] += left.get_element(i, k) * right.get_element(k, j);
 			}
-			//buffer.set_array(i, j, temp);
-			//temp = 0;
 		}
 	}
 	return buffer;
@@ -353,22 +323,17 @@ Matrix minor_matrix(const Matrix& other)
 	if (other.get_cols() == 2)
 	{
 		Matrix buffer(2, 2);
-		buffer.set_rows(2);
-		buffer.set_cols(2);
-		buffer.set_array(0, 0, other.get_element(1, 1));
-		buffer.set_array(0, 1, other.get_element(1, 0));
-		buffer.set_array(1, 0, other.get_element(0, 1));
-		buffer.set_array(1, 1, other.get_element(0, 0));
+
+		buffer[0][0] = other.get_element(1, 1);
+		buffer[0][1] = other.get_element(1, 0);
+		buffer[1][0] = other.get_element(0, 1);
+		buffer[1][1] = other.get_element(0, 0);
 		return buffer;
 	}
 	else if (other.get_cols() == 3 || other.get_cols() == 4)
 	{
 		Matrix buffer(other.get_cols(), other.get_cols());
-		buffer.set_rows(other.get_rows());
-		buffer.set_cols(other.get_cols());
 		Matrix temp(other.get_cols() - 1, other.get_cols() - 1);
-		temp.set_rows(other.get_rows() - 1);
-		temp.set_cols(other.get_cols() - 1);
 		for (int i = 0; i < other.get_cols(); i++)
 		{
 			for (int j = 0; j < other.get_cols(); j++)
@@ -380,12 +345,12 @@ Matrix minor_matrix(const Matrix& other)
 					for (int l = 0; l < other.get_cols(); l ++)
 					{
 						if (k == i || l == j) continue;
-						temp.set_array(k1, l1, other.get_element(k, l));
+						temp[k1][l1] = other.get_element(k, l);
 						k1++;
 						l1++;
 					}
 				}
-				buffer.set_array(i, j, matrix_determenant(temp));
+				buffer[i][j] = matrix_determenant(temp);
 			}
 		}
 		return buffer;
@@ -401,21 +366,19 @@ Matrix matrix_of_algebraic_additions(const Matrix& other)
 {
 	if (other.get_cols() != other.get_rows()) return 0;
 	Matrix buffer(other.get_rows(), other.get_cols());
-	buffer.set_rows(other.get_rows());
-	buffer.set_cols(other.get_cols());
 	copy_matrix(buffer, other);
 	if (buffer.get_cols() == 3)
 	{
-		buffer.set_array(0, 1, buffer.get_element(0, 1) * (-1));
-		buffer.set_array(1, 0, buffer.get_element(1, 0) * (-1));
-		buffer.set_array(1, 2, buffer.get_element(1, 2) * (-1));
-		buffer.set_array(2, 1, buffer.get_element(2, 1) * (-1));
+		buffer[0][1] *= (-1);
+		buffer[1][0] *= (-1);
+		buffer[1][2] *= (-1);
+		buffer[2][1] *= (-1);
 		return buffer;
 	}
 	else if (buffer.get_cols() == 2)
 	{
-		buffer.set_array(0, 1, buffer.get_element(0, 1) * (-1));
-		buffer.set_array(1, 0, buffer.get_element(1, 0) * (-1));
+		buffer[0][1] *= (-1);
+		buffer[1][0] *= (-1);
 		return buffer;
 	}
 	else
@@ -430,7 +393,7 @@ Matrix& copy_matrix(Matrix& left, const Matrix& right)
 	{
 		for (int j = 0; j < right.get_cols(); j++)
 		{
-			left.set_array(i, j, right.get_element(i, j));
+			left[i][j] = right.get_element(i, j);
 		}
 	}
 	return left;
@@ -440,13 +403,11 @@ Matrix transpose_matrix(const Matrix& other)
 {
 	if (other.get_cols() != other.get_rows()) return 0;
 	Matrix buffer(other.get_rows(), other.get_cols());
-	buffer.set_rows(other.get_rows());
-	buffer.set_cols(other.get_cols());
 	for (int i = 0; i < buffer.get_rows(); i++)
 	{
 		for (int j = 0; j < buffer.get_cols(); j++)
 		{
-			buffer.set_array(j, i, other.get_element(i, j));
+			buffer[j][i] = other.get_element(i, j);
 		}
 	}
 	return buffer;
@@ -456,8 +417,6 @@ Matrix operator/(const Matrix& left, const Matrix& right)
 {
 	int matrixDetermenant = matrix_determenant(right);
 	Matrix buffer(right.get_rows(), right.get_cols());
-	buffer.set_rows(right.get_rows());
-	buffer.set_cols(right.get_cols());
 	buffer = transpose_matrix(matrix_of_algebraic_additions(minor_matrix(right)));
 	return left * buffer;
 }
