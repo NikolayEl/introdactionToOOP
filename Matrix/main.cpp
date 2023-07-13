@@ -45,11 +45,11 @@ public:
 	{
 		cout << "DefConstructor:\t" << this << endl;
 	}
-	Matrix(int cols): Matrix(1, cols) //Сделал его основным конструктором ибо у него два параметра для создания матрицы
+	Matrix(int cols): Matrix(1, cols) 
 	{
 		cout << "1ArgConstructor:\t" << this << endl;
 	}
-	Matrix(int rows, int cols):rows(rows), cols(cols), array(new int*[rows] {})
+	Matrix(int rows, int cols):rows(rows), cols(cols), array(new int*[rows] {}) //Сделал его основным конструктором ибо у него два параметра для создания матрицы
 	{
 		for (int i = 0; i < rows; i++) array[i] = new int[cols] {};
 		cout << "2ArgConstructor:\t" << this << endl;
