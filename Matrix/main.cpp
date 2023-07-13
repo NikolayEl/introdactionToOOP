@@ -43,12 +43,10 @@ public:
 	//			Constructor's
 	Matrix():Matrix(1, 1)
 	{
-		for (int i = 0; i < rows; i++) array[i] = new int[cols] {};
 		cout << "DefConstructor:\t" << this << endl;
 	}
 	Matrix(int cols): Matrix(1, cols)
 	{
-		for (int i = 0; i < rows; i++) array[i] = new int[cols] {};
 		cout << "1ArgConstructor:\t" << this << endl;
 	}
 	Matrix(int rows, int cols):rows(rows), cols(cols), array(new int*[rows] {})
@@ -56,9 +54,10 @@ public:
 		for (int i = 0; i < rows; i++) array[i] = new int[cols] {};
 		cout << "2ArgConstructor:\t" << this << endl;
 	}
-	Matrix(const Matrix& other)
+	Matrix(const Matrix& other):Matrix(other.rows, other.cols)
 	{
-
+		this->array = other.array;
+		cout << "CopyConstructor:\t" << this << endl;
 	}
 	Matrix(Matrix&& other): rows(other.rows), cols(other.cols), array(other.array)
 	{
@@ -146,6 +145,8 @@ void main()
 	Matrix matrix11(4);
 	matrix11.random_array();
 	cout << matrix11 << endl;
+	Matrix matrix12 = matrix11; //Вызов Copy Constructor
+	cout << matrix12 << endl;
 	Matrix matrix1(3, 3);
 	Matrix matrix2(3, 3);
 	matrix1.random_array();
@@ -185,15 +186,15 @@ void main()
 	cout << transposeMatrix2 << endl;
 	cout << delimetr;
 	cout << "Итак внимание - обратная матрица!" << endl;
-	cout << "Обратная матрица matrix1, сперва множитель: " << -1 << "/" << matrix_determenant(matrix1) * (-1) << endl;
+	cout << "Обратная матрица matrix1, сперва множитель: " << 1 << "/" << matrix_determenant(matrix1) << endl;
 	cout << "Сама матрица:" << endl;
 	cout << transposeMatrix1 << endl;
-	cout << "Обратная матрица matrix2, сперва множитель: " << -1 << "/" << matrix_determenant(matrix2) * (-1) << endl;
+	cout << "Обратная матрица matrix2, сперва множитель: " << 1 << "/" << matrix_determenant(matrix2) << endl;
 	cout << "Сама матрица:" << endl;
 	cout << transposeMatrix2 << endl;
 	cout << delimetr;
 	cout << "matrix1 / matrix2:" << endl << endl;
-	cout << "сперва множитель: " << -1 << "/" << matrix_determenant(matrix2) * (-1) << endl;
+	cout << "сперва множитель: " << 1 << "/" << matrix_determenant(matrix2) << endl;
 	cout << matrix1 / matrix2 << endl;
 	cout << delimetr;
 	cout << "Умножаем матрицу1 на число:" << endl;
