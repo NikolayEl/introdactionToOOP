@@ -45,7 +45,7 @@ public:
 	{
 		cout << "DefConstructor:\t" << this << endl;
 	}
-	Matrix(int cols): Matrix(1, cols)
+	Matrix(int cols): Matrix(1, cols) //Сделал его основным конструктором ибо у него два параметра для создания матрицы
 	{
 		cout << "1ArgConstructor:\t" << this << endl;
 	}
