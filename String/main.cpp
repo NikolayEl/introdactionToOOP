@@ -9,6 +9,8 @@ class String;
 ostream& operator<<(ostream& out, const String& obj);
 String operator+(const String& left, const String& right);
 
+//									Объявление класса - Class declaration
+//////////////////////////////////////////////////////////////////////////////////////////////////
 class String
 {
 	int size; //Размер строки в байтах
@@ -36,6 +38,9 @@ public:
 	//				Methods
 	void print() const;
 };
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
+//							Определение класса - class Defenition
 
 int String::get_size() const //:: - Scope operator (Оператор разрешения видимости)
 {
@@ -120,7 +125,8 @@ void String::print() const
 	cout << "Str:\t" << str << endl;
 
 }
-
+//////////////////////////////////////////Определение класса
+///////////////////////////////////////////////////////////////////////////////////////////////////////////
 #define BASE_CHEK
 //#define CALLING_CONSTRUCTORS
 
