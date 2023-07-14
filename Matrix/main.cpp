@@ -54,7 +54,7 @@ public:
 		for (int i = 0; i < rows; i++) array[i] = new int[cols] {};
 		cout << "2ArgConstructor:\t" << this << endl;
 	}
-	Matrix(const Matrix& other):Matrix(other.rows, other.cols), array(other.array)
+	Matrix(const Matrix& other):Matrix(other.rows, other.cols)
 	{
 		this->array = other.array;
 		cout << "CopyConstructor:\t" << this << endl;
