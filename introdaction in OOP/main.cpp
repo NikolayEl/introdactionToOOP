@@ -1,6 +1,8 @@
 ﻿#include "Fraction.h"
 
 
+
+
 //#define HOME_WORK
 //#define HOME_WORK2
 #define HOME_WORK3
@@ -188,5 +190,8 @@ void main()
 	cout << b << endl;
 
 #endif // CONVERSION_FROM_CLASS_TO_OTHER
+
+	//String A = "Проверка";
+
 
 }
