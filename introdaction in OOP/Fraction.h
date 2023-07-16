@@ -1,6 +1,6 @@
 #pragma once
-//#pragma comment(lib, "P:\\CPL\\VIsualStudio\\Library")
 #define _CRT_SECURE_NO_WARNINGS
+
 
 #include <iostream>
 
