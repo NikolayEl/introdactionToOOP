@@ -72,13 +72,11 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <SourcePath>$(VC_SourcePath);</SourcePath>
-    <LibraryPath>
-    </LibraryPath>
+    <LibraryPath>$(VC_IncludePath);$(WindowsSDK_IncludePath);</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <SourcePath>$(VC_SourcePath);</SourcePath>
-    <LibraryPath>
-    </LibraryPath>
+    <LibraryPath>$(VC_IncludePath);$(WindowsSDK_IncludePath);</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
