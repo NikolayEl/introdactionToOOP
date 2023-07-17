@@ -1,6 +1,5 @@
 ﻿#include "Fraction.h"
-#pragma comment(lib, "String")
-//#include <String.h>
+//#include <MyString.h>
 
 
 
@@ -192,8 +191,8 @@ void main()
 
 #endif // CONVERSION_FROM_CLASS_TO_OTHER
 
-	String str("Test");
-	str.print();
+	//String str("Test");
+	//str.print();
 
 
 }
